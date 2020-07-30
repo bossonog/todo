@@ -37,7 +37,8 @@ ul {
   font-size: 40px;
   top: 10px;
   left: 11px;
-  color: #4d4d4d;;
+  color: #4d4d4d;
+  user-select: none;
 }
 
 .app-new-todo {
@@ -47,12 +48,12 @@ ul {
   font-size: 24px;
 }
 
-.app-list {
+.app-todos {
   background-color: #fff;
   border-top: 1px solid #e6e6e6;
 }
 
-.app-item {
+.app-todo {
   padding: 10px 60px;
   border-bottom: 1px solid #ededed;
   font-size: 18px;
@@ -60,16 +61,16 @@ ul {
   position: relative;
 }
 
-.app-item:hover .app-item-remove {
+.app-todo:hover .app-todo-remove {
   display: block;
 }
 
-.app-item.completed {
+.app-todo.completed {
   text-decoration: line-through;
   color: #d9d9d9;
 }
 
-.app-item-remove {
+.app-todo-remove {
   display: none;
   position: absolute;
   border: none;
@@ -81,6 +82,6 @@ ul {
   transition: color 0.2s ease-out;
 }
 
-.app-item-remove:hover {
+.app-todo-remove:hover {
   color: #af5b5e;
 }
