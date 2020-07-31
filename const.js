@@ -7,7 +7,7 @@ let todos = [
   {
     id: 2,
     title: 'todo 2',
-    completed: true,
+    completed: false,
   },
   {
     id: 3,

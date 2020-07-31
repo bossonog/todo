@@ -6,10 +6,23 @@
 
 body {
   background-color: #f5f5f5;
+  font-size: 14px;
 }
 
 ul {
   list-style-type: none;
+}
+
+button {
+  
+}
+
+.header {
+  padding: 14px 0;
+}
+
+.section {
+  padding: 50px 0px;
 }
 
 .container {
@@ -37,8 +50,12 @@ ul {
   font-size: 40px;
   top: 10px;
   left: 11px;
-  color: #4d4d4d;
+  color: #6e6e6e;
   user-select: none;
+}
+
+.app-checkall.checked {
+  color: #4d4d4d;
 }
 
 .app-new-todo {
@@ -59,6 +76,7 @@ ul {
   font-size: 18px;
   cursor: pointer;
   position: relative;
+  word-break: break-all;
 }
 
 .app-todo:hover .app-todo-remove {
@@ -76,7 +94,7 @@ ul {
   border: none;
   color: #cc9a9a;
   background: none;
-  right: 15px;
+  right: 19px;
   padding: 15px;
   top: -3px;
   transition: color 0.2s ease-out;
@@ -84,4 +102,39 @@ ul {
 
 .app-todo-remove:hover {
   color: #af5b5e;
+}
+
+.app-controls {
+  color: #777;
+  padding: 10px 15px;
+  user-select: none;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-filters {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  bottom: -6px;
+}
+
+.app-filter-btn {
+  margin-right: 8px;
+}
+
+.app-filter-btn:last-child {
+  margin-right: 0px
+}
+
+.app-clear-btn {
+  border: none;
+  cursor: pointer;
+}
+
+.app-clear-btn:hover {
+  text-decoration: underline;
 }
