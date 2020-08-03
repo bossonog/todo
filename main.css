@@ -1,3 +1,15 @@
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/MaterialIcons-Regular.eot);
+  src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(fonts/MaterialIcons-Regular.woff2) format('woff2'),
+    url(fonts/https://example.com/MaterialIcons-Regular.woff) format('woff'),
+    url(fonts/https://example.com/MaterialIcons-Regular.ttf) format('truetype');
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -13,8 +25,31 @@ ul {
   list-style-type: none;
 }
 
-button {
-  
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+
+  user-select: none;
 }
 
 .header {
@@ -44,7 +79,14 @@ button {
   color: #af2f2f26;
 }
 
-.app-checkall {
+.app-error {
+  position: absolute;
+  padding: 10px 15px;
+  transform: translateY(-100%);
+  color: #af5b5e;
+}
+
+#app-checkall {
   position: absolute;
   cursor: default;
   font-size: 40px;
@@ -54,7 +96,7 @@ button {
   user-select: none;
 }
 
-.app-checkall.checked {
+#app-checkall.checked {
   color: #4d4d4d;
 }
 
@@ -74,9 +116,9 @@ button {
   padding: 10px 60px;
   border-bottom: 1px solid #ededed;
   font-size: 18px;
-  cursor: pointer;
   position: relative;
   word-break: break-all;
+  cursor: default;
 }
 
 .app-todo:hover .app-todo-remove {
@@ -86,6 +128,13 @@ button {
 .app-todo.completed {
   text-decoration: line-through;
   color: #d9d9d9;
+}
+
+.app-todo-checkbox {
+  position: absolute;
+  top: 8px;
+  left: 19px;
+  cursor: pointer;
 }
 
 .app-todo-remove {
@@ -124,6 +173,10 @@ button {
 
 .app-filter-btn {
   margin-right: 8px;
+}
+
+.app-filter-btn.active {
+  font-weight: bold;
 }
 
 .app-filter-btn:last-child {
