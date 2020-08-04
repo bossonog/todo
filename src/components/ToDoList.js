@@ -27,25 +27,25 @@ class ToDoList {
     }
   }
 
-  render() {
+  render(todosToRender) {
     this.clearToDoList()
 
-    todos.forEach((todo) => {
+    todosToRender.forEach((todo) => {
       const item = new ToDoItem(this.list, todo);
 
       item.on(EVENT_TODO_EDITED, () => {
         this.emit(EVENT_TODO_CHANGED);
-        this.render()
       });
 
       item.on(EVENT_TODO_REMOVED, () => {
         this.emit(EVENT_TODO_CHANGED);
-        this.render()
       });
 
       item.render();
     });
 
-    this.elem.append(this.list);
+    if (!document.querySelector('.app-todos')) {
+      this.elem.append(this.list);
+    }
   }
 }

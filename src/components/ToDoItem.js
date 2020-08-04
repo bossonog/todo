@@ -54,7 +54,6 @@ class ToDoItem {
 
   removerOnClick = (e) => {
     const id = +this.li.dataset.id;
-
     todos = todos.filter((todo) => todo.id !== id);
 
     this.emit(EVENT_TODO_REMOVED);

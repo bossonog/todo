@@ -33,15 +33,17 @@ class ToDoAllButton {
   }
 
   onClick = (e) => {
-    e.target.classList.toggle('checked');
+    if (todos.length) {
+      e.target.classList.toggle('checked');
 
-    const checked = e.target.classList.contains('checked');
+      const checked = e.target.classList.contains('checked');
 
-    todos.forEach((todo) => {
-      todo.completed = checked;
-    });
+      todos.forEach((todo) => {
+        todo.completed = checked;
+      });
 
-    this.emit(EVENT_TODO_TOGGLED);
+      this.emit(EVENT_TODO_TOGGLED);
+    }
   }
 
   update() {
