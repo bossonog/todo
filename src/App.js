@@ -19,27 +19,45 @@ class App {
 
     const toDoControls = new ToDoControls(app);
 
-    toDoInput.on(EVENT_TODO_ADDED, () => {
+    toDoInput.on(EVENT_TODO_ADDED, (todo) => {
+      this.addToDo(todo);
+
       toDoAllButton.update();
       toDoList.render(this.getTodosByFilterState(this.filterState));
       toDoControls.render();
     });
 
     toDoInput.on(EVENT_INPUT_VALIDATION, (errorMsg) => {
-      const errorBox = document.querySelector('.app-error');
-
-      errorBox.textContent = errorMsg;
+      this.updateErrorMessage(errorMsg);
     });
 
-    toDoAllButton.on(EVENT_TODO_TOGGLED, () => {
-      toDoList.render(this.getTodosByFilterState(this.filterState));//
+    toDoAllButton.on(EVENT_TODO_TOGGLED, (checked) => {
+      this.setStatusCompleted(checked);
+
+      toDoList.render(this.getTodosByFilterState(this.filterState));
       toDoControls.render();
     });
 
-    toDoList.on(EVENT_TODO_CHANGED, () => {
-      toDoList.render(this.getTodosByFilterState(this.filterState));//
+    toDoList.on(EVENT_TODO_EDITED, (todo) => {
+      const { id, completed, title } = todo;
+
+      this.editToDoById(id, completed, title);
+
+      toDoList.render(this.getTodosByFilterState(this.filterState));
       toDoAllButton.update();
       toDoControls.render();
+    });
+
+    toDoList.on(EVENT_TODO_REMOVED, (id) => {
+      this.removeToDoById(id);
+
+      toDoList.render(this.getTodosByFilterState(this.filterState));
+      toDoAllButton.update();
+      toDoControls.render();
+    });
+
+    toDoList.on(EVENT_INPUT_VALIDATION, (errorMsg) => {
+      this.updateErrorMessage(errorMsg);
     });
 
     toDoControls.on(EVENT_FILTER_APPLIED, (filterState) => {
@@ -50,6 +68,7 @@ class App {
 
     toDoControls.on(EVENT_CLEAR_COMPLETED, () => {
       toDoList.render(this.getTodosByFilterState(this.filterState));
+      toDoControls.render();
     });
 
     toDoAllButton.render();
@@ -80,6 +99,35 @@ class App {
     return filteredTodos;
   }
 
+  editToDoById(id, completed, title) {
+    const todo = todos.find((todo) => todo.id === id);
+
+    todo.completed = completed;
+    todo.title = title;
+  }
+
+  removeToDoById(id) {
+    todos = todos.filter((todo) => todo.id !== id);
+  }
+
+  setStatusCompleted(checked) {
+    todos.forEach((todo) => {
+      todo.completed = checked;
+    });
+  }
+
+  updateErrorMessage(errorMsg) {
+    const errorBox = document.querySelector('.app-error');
+
+    errorBox.textContent = errorMsg;
+  }
+
+  addToDo(todo) {
+    const id = todos.length ? todos[todos.length - 1].id + 1 : 0;
+
+    todos.push({ ...todo, id });
+  }
+
   render() {
     const path = '/home';
 
@@ -89,27 +137,6 @@ class App {
       this.renderLogin();
     }
   }
-
-  // async getTodos() {
-  //   const response = httpGet('/api/todos')
-
-  //   this.renderTodos(response.data.list)
-  // }
-
-  // renderToDoInput() {
-  //   const toDoInput = new ToDoInput(app);
-  //   toDoInput.on('added-todo', this.renderToDoList)
-  //   // input.emit('add-todo')
-  //   toDoInput.render();
-
-  //   const toDoList = new ToDoList(app, todos);
-
-  //   toDoList.render();
-  // }
-
-  // renderToDoList() {
-  //   render todos here
-  // }
 }
 
 const app = new App();

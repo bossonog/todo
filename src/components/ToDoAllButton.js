@@ -38,11 +38,7 @@ class ToDoAllButton {
 
       const checked = e.target.classList.contains('checked');
 
-      todos.forEach((todo) => {
-        todo.completed = checked;
-      });
-
-      this.emit(EVENT_TODO_TOGGLED);
+      this.emit(EVENT_TODO_TOGGLED, checked);
     }
   }
 
