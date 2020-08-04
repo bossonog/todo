@@ -2,7 +2,10 @@ class ToDoItem {
   constructor(list, todo) {
     this.list = list;
     this.todo = todo;
+    this.checkbox = null;
+    this.remover = null;
     this.li = null;
+    this.editBox = null;
     this.eventEmitter = new EventEmitter();
 
     this.init();
@@ -17,25 +20,27 @@ class ToDoItem {
 
     this.todo.completed ? this.li.classList.add('completed') : this.li.classList.remove('completed');
 
-    const checkbox = document.createElement('span');
+    this.li.addEventListener('dblclick', this.liOnDblClick);
 
-    checkbox.textContent = this.todo.completed ? 'check_box' : 'check_box_outline_blank';
+    this.checkbox = document.createElement('span');
 
-    checkbox.classList.add('material-icons', 'app-todo-checkbox');
+    this.checkbox.textContent = this.todo.completed ? 'check_box' : 'check_box_outline_blank';
 
-    checkbox.addEventListener('click', this.checkboxOnClick);
+    this.checkbox.classList.add('material-icons', 'app-todo-checkbox');
 
-    this.li.append(checkbox);
+    this.checkbox.addEventListener('click', this.checkboxOnClick);
 
-    const remover = document.createElement('button');
+    this.li.append(this.checkbox);
 
-    remover.textContent = 'x';
+    this.remover = document.createElement('button');
 
-    remover.classList.add('app-todo-remove', 'button');
+    this.remover.textContent = 'x';
 
-    remover.addEventListener('click', this.removerOnClick);
+    this.remover.classList.add('app-todo-remove', 'button');
 
-    this.li.append(remover);
+    this.remover.addEventListener('click', this.removerOnClick);
+
+    this.li.append(this.remover);
   }
 
   on(eventName, fn) {
@@ -46,17 +51,66 @@ class ToDoItem {
     this.eventEmitter.emit(eventName, data);
   }
 
-  checkboxOnClick = (e) => {
-    this.todo.completed = !this.todo.completed;
+  liOnDblClick = (e) => {
+    this.editBox = document.createElement('input');
 
-    this.emit(EVENT_TODO_EDITED);
+    this.editBox.value = this.todo.title;
+
+    setTimeout(() => {
+      this.editBox.focus();
+    }, 0);
+
+    this.editBox.classList.add('app-todo-edit');
+
+    this.editBox.addEventListener('keydown', this.editBoxOnEnterPressed);
+    this.editBox.addEventListener('input', this.editBoxOnInputValidation)
+
+    document.body.addEventListener('click', this.editBoxOnBodyClick);
+
+    this.li.innerHTML = '';
+    this.li.append(this.editBox);
+  }
+
+  checkboxOnClick = (e) => {
+    this.emit(EVENT_TODO_EDITED, { ...this.todo, completed: !this.todo.completed });
   }
 
   removerOnClick = (e) => {
     const id = +this.li.dataset.id;
-    todos = todos.filter((todo) => todo.id !== id);
 
-    this.emit(EVENT_TODO_REMOVED);
+    this.emit(EVENT_TODO_REMOVED, id);
+  }
+
+  editBoxOnEnterPressed = (e) => {
+    if (e.keyCode === 13) {
+      this.editBoxSubmit(e.target.value);
+    }
+  }
+
+  editBoxOnBodyClick = (e) => {
+    if (this.editBox) {
+      this.editBoxSubmit(this.editBox.value);
+
+      this.editBox = null;
+    }
+  }
+
+  editBoxOnInputValidation = (e) => {
+    const errorMsg = validateToDoInput(e.target.value);
+
+    this.emit(EVENT_INPUT_VALIDATION, errorMsg);
+  }
+
+  editBoxSubmit(title) {
+    const errorMsg = validateToDoInput(title);
+
+    if (errorMsg) {
+      return this.emit(EVENT_INPUT_VALIDATION, errorMsg);
+    }
+
+    this.emit(EVENT_INPUT_VALIDATION, errorMsg);
+
+    this.emit(EVENT_TODO_EDITED, { ...this.todo, title });
   }
 
   render() {

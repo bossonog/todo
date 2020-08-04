@@ -30,8 +30,6 @@ class ToDoClearButton {
   }
 
   onClick = (e) => {
-    todos = todos.filter((todo) => !todo.completed);
-
     this.emit(EVENT_CLEAR_COMPLETED);
   }
 

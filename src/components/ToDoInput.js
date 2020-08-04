@@ -30,7 +30,7 @@ class ToDoInput {
 
   onSubmit = (e) => {
     if (e.keyCode === 13) {
-      const errorMsg = validate(e.target.value);
+      const errorMsg = validateToDoInput(e.target.value);
 
       if (errorMsg) {
         return this.emit(EVENT_INPUT_VALIDATION, errorMsg);
@@ -38,22 +38,19 @@ class ToDoInput {
 
       this.emit(EVENT_INPUT_VALIDATION, errorMsg);
 
-      const id = todos.length ? todos[todos.length - 1].id + 1 : 0;
       const title = e.target.value;
       const completed = false;
 
-      const todo = { id, title, completed };
-
-      todos.push(todo);
+      const todo = { title, completed };
 
       e.target.value = '';
 
-      this.emit(EVENT_TODO_ADDED);
+      this.emit(EVENT_TODO_ADDED, todo);
     }
   }
 
   onInput = (e) => {
-    const errorMsg = validate(e.target.value);
+    const errorMsg = validateToDoInput(e.target.value);
 
     this.emit(EVENT_INPUT_VALIDATION, errorMsg);
   }

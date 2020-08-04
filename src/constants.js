@@ -1,6 +1,8 @@
-const ACTIVE = 'active';
-const ALL = 'all';
-const COMPLETED = 'completed';
+const FILTER_TYPE = {
+  ALL: 'ALL',
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+}
 
 const EVENT_TODO_ADDED = 'EVENT_TODO_ADDED';
 const EVENT_TODO_EDITED = 'EVENT_TODO_EDITED';

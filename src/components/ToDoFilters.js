@@ -2,7 +2,7 @@ class ToDoFilters {
   constructor(elem) {
     this.elem = elem;
     this.filters = null;
-    this.filterState = ALL;
+    this.filterState = FILTER_TYPE.ALL;
     this.eventEmitter = new EventEmitter();
 
     this.init();
@@ -20,7 +20,7 @@ class ToDoFilters {
     allBtn.textContent = "All";
 
     const allBtnClickHandler = (e) => {
-      this.filterState = ALL;
+      this.filterState = FILTER_TYPE.ALL;
 
       allBtn.classList.add('active');
       activeBtn.classList.remove('active');
@@ -38,7 +38,7 @@ class ToDoFilters {
     activeBtn.textContent = "Active";
 
     const activeBtnClickHandler = (e) => {
-      this.filterState = ACTIVE;
+      this.filterState = FILTER_TYPE.ACTIVE;
 
       activeBtn.classList.add('active');
       allBtn.classList.remove('active');
@@ -56,7 +56,7 @@ class ToDoFilters {
     completedBtn.textContent = "Completed";
 
     const completedBtnClickHandler = (e) => {
-      this.filterState = COMPLETED;
+      this.filterState = FILTER_TYPE.COMPLETED;
 
       completedBtn.classList.add('active');
       allBtn.classList.remove('active');

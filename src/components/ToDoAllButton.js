@@ -15,7 +15,7 @@ class ToDoAllButton {
     this.button.id = 'app-checkall';
     this.button.textContent = 'check_box';
 
-    const checked = todos.every((todo) => todo.completed);
+    const checked = this.isAllToDosCompleted();
 
     if (checked) {
       this.button.classList.add('checked');
@@ -38,16 +38,16 @@ class ToDoAllButton {
 
       const checked = e.target.classList.contains('checked');
 
-      todos.forEach((todo) => {
-        todo.completed = checked;
-      });
-
-      this.emit(EVENT_TODO_TOGGLED);
+      this.emit(EVENT_TODO_TOGGLED, checked);
     }
   }
 
+  isAllToDosCompleted() {
+    return todos.every((todo) => todo.completed);
+  }
+
   update() {
-    const checked = todos.every((todo) => todo.completed);
+    const checked = this.isAllToDosCompleted();
 
     if (checked) {
       return this.button.classList.add('checked');

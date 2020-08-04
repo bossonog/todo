@@ -1,4 +1,4 @@
-const validate = (str) => {
+const validateToDoInput = (str) => {
   let errorMsg = '';
 
   if (!str) {

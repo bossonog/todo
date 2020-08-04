@@ -33,13 +33,17 @@ class ToDoList {
     todosToRender.forEach((todo) => {
       const item = new ToDoItem(this.list, todo);
 
-      item.on(EVENT_TODO_EDITED, () => {
-        this.emit(EVENT_TODO_CHANGED);
+      item.on(EVENT_TODO_EDITED, (todo) => {
+        this.emit(EVENT_TODO_EDITED, todo);
       });
 
-      item.on(EVENT_TODO_REMOVED, () => {
-        this.emit(EVENT_TODO_CHANGED);
+      item.on(EVENT_TODO_REMOVED, (id) => {
+        this.emit(EVENT_TODO_REMOVED, id);
       });
+
+      item.on(EVENT_INPUT_VALIDATION, (errorMsg) => {
+        this.emit(EVENT_INPUT_VALIDATION, errorMsg)
+      })
 
       item.render();
     });
