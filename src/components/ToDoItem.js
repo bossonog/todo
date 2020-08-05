@@ -96,21 +96,13 @@ class ToDoItem {
   }
 
   editBoxOnInputValidation = (e) => {
-<<<<<<< HEAD
     const errorMsg = validateToDoInput(e.target.value);
-=======
-    const errorMsg = validate(e.target.value);
->>>>>>> 4950c870d7a123cd7a5f5836fd7d76c76c0454c3
 
     this.emit(EVENT_INPUT_VALIDATION, errorMsg);
   }
 
   editBoxSubmit(title) {
-<<<<<<< HEAD
     const errorMsg = validateToDoInput(title);
-=======
-    const errorMsg = validate(title);
->>>>>>> 4950c870d7a123cd7a5f5836fd7d76c76c0454c3
 
     if (errorMsg) {
       return this.emit(EVENT_INPUT_VALIDATION, errorMsg);
