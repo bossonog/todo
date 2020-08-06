@@ -1,4 +1,6 @@
-class ToDoCounter {
+import { todos } from '../constants';
+
+export class ToDoCounter {
   constructor(elem) {
     this.elem = elem;
     this.span = null;

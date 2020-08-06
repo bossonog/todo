@@ -1,7 +1,8 @@
-class MainLayout {
-  constructor(root) {
+export class MainLayout {
+  constructor(root, isAuthenticated) {
     this.root = root;
     this.wrapper = null;
+    this.isAuthenticated = isAuthenticated;
 
     this.init();
   }
@@ -25,6 +26,20 @@ class MainLayout {
 
     h1.classList.add('app-title', 'title');
 
+    const logoutBtn = document.createElement('button');
+
+    logoutBtn.hidden = !this.isAuthenticated();
+
+    logoutBtn.textContent = 'Logout';
+
+    logoutBtn.classList.add('header-logout');
+
+    logoutBtn.addEventListener('click', (e) => {
+      localStorage.removeItem('auth');
+      window.location.reload();
+    });
+
+    containerHeader.append(logoutBtn);
     containerHeader.append(h1);
     header.append(containerHeader);
     this.wrapper.append(header);
@@ -43,16 +58,12 @@ class MainLayout {
 
     const app = document.createElement('div');
 
-    app.classList.add('app');
+    app.id = 'app';
 
-    const errorBox = document.createElement('div');
-
-    errorBox.classList.add('app-error');
-
-    app.append(errorBox);
     containerApp.append(app);
     section.append(containerApp);
     main.append(section);
+
     this.wrapper.append(main);
   }
 

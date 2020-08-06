@@ -1,0 +1,31 @@
+.app-login {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 40px 60px;
+  width: 400px;
+  margin: 0 auto;
+}
+
+.app-login-control {
+  width: 100%;
+  padding: 16px;
+  margin: 16px 0px;
+}
+
+.app-login-control.error {
+  border-color: red;
+  border-radius: 2px;
+}
+
+.app-login-control:last-child {
+  margin-bottom: 0px;
+  padding: 10px;
+}
+
+.app-input-error {
+  color: #af5b5e;
+}
+
+.app-login-control {
+
+}

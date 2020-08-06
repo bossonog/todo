@@ -1,7 +1,11 @@
-class ToDoAllButton {
-  constructor(elem) {
+import { EventEmitter } from '../util/EventEmitter';
+import { EVENT_TYPE } from '../constants';
+
+export class ToDoAllButton {
+  constructor(elem, todos) {
     this.elem = elem;
     this.button = null;
+    this.todos = todos;
     this.eventEmitter = new EventEmitter();
 
     this.init();
@@ -33,20 +37,21 @@ class ToDoAllButton {
   }
 
   onClick = (e) => {
-    if (todos.length) {
+    if (this.todos.length) {
       e.target.classList.toggle('checked');
 
       const checked = e.target.classList.contains('checked');
 
-      this.emit(EVENT_TODO_TOGGLED, checked);
+      this.emit(EVENT_TYPE.EVENT_TODO_TOGGLED, checked);
     }
   }
 
   isAllToDosCompleted() {
-    return todos.every((todo) => todo.completed);
+    return this.todos.every((todo) => todo.completed);
   }
 
-  update() {
+  update(todos) {
+    this.todos = todos
     const checked = this.isAllToDosCompleted();
 
     if (checked) {

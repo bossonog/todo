@@ -1,4 +1,8 @@
-class ToDoItem {
+import { EVENT_TYPE } from '../constants';
+import { EventEmitter } from '../util/EventEmitter';
+import { validateToDoInput } from '../validation';
+
+export class ToDoItem {
   constructor(list, todo) {
     this.list = list;
     this.todo = todo;
@@ -72,13 +76,13 @@ class ToDoItem {
   }
 
   checkboxOnClick = (e) => {
-    this.emit(EVENT_TODO_EDITED, { ...this.todo, completed: !this.todo.completed });
+    this.emit(EVENT_TYPE.EVENT_TODO_EDITED, { ...this.todo, completed: !this.todo.completed });
   }
 
   removerOnClick = (e) => {
     const id = +this.li.dataset.id;
 
-    this.emit(EVENT_TODO_REMOVED, id);
+    this.emit(EVENT_TYPE.EVENT_TODO_REMOVED, id);
   }
 
   editBoxOnEnterPressed = (e) => {
@@ -88,7 +92,7 @@ class ToDoItem {
   }
 
   editBoxOnBodyClick = (e) => {
-    if (this.editBox) {
+    if (this.editBox && e.target !== this.editBox) {
       this.editBoxSubmit(this.editBox.value);
 
       this.editBox = null;
@@ -98,19 +102,19 @@ class ToDoItem {
   editBoxOnInputValidation = (e) => {
     const errorMsg = validateToDoInput(e.target.value);
 
-    this.emit(EVENT_INPUT_VALIDATION, errorMsg);
+    this.emit(EVENT_TYPE.EVENT_INPUT_VALIDATION, errorMsg);
   }
 
   editBoxSubmit(title) {
-    const errorMsg = validateToDoInput(title);
+    // const errorMsg = validateToDoInput(title);
 
-    if (errorMsg) {
-      return this.emit(EVENT_INPUT_VALIDATION, errorMsg);
-    }
+    // if (errorMsg) {
+    //   return this.emit(EVENT_TYPE.EVENT_INPUT_VALIDATION, errorMsg);
+    // }
 
-    this.emit(EVENT_INPUT_VALIDATION, errorMsg);
+    // this.emit(EVENT_TYPE.EVENT_INPUT_VALIDATION, errorMsg);
 
-    this.emit(EVENT_TODO_EDITED, { ...this.todo, title });
+    this.emit(EVENT_TYPE.EVENT_TODO_EDITED, { ...this.todo, title });
   }
 
   render() {

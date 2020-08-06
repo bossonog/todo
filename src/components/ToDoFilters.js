@@ -1,4 +1,7 @@
-class ToDoFilters {
+import { EventEmitter } from '../util/EventEmitter';
+import { EVENT_TYPE, FILTER_TYPE } from '../constants';
+
+export class ToDoFilters {
   constructor(elem) {
     this.elem = elem;
     this.filters = null;
@@ -26,7 +29,7 @@ class ToDoFilters {
       activeBtn.classList.remove('active');
       completedBtn.classList.remove('active');
 
-      this.emit(EVENT_FILTER_APPLIED, this.filterState);
+      this.emit(EVENT_TYPE.EVENT_FILTER_APPLIED, this.filterState);
     }
 
     allBtn.addEventListener('click', allBtnClickHandler);
@@ -44,7 +47,7 @@ class ToDoFilters {
       allBtn.classList.remove('active');
       completedBtn.classList.remove('active');
 
-      this.emit(EVENT_FILTER_APPLIED, this.filterState);
+      this.emit(EVENT_TYPE.EVENT_FILTER_APPLIED, this.filterState);
     }
 
     activeBtn.addEventListener('click', activeBtnClickHandler);
@@ -62,7 +65,7 @@ class ToDoFilters {
       allBtn.classList.remove('active');
       activeBtn.classList.remove('active');
 
-      this.emit(EVENT_FILTER_APPLIED, this.filterState);
+      this.emit(EVENT_TYPE.EVENT_FILTER_APPLIED, this.filterState);
     }
 
     completedBtn.addEventListener('click', completedBtnClickHandler);

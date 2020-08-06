@@ -1,8 +1,12 @@
-class ToDoClearButton {
-  constructor(elem) {
+import { EventEmitter } from '../util/EventEmitter';
+import { EVENT_TYPE } from '../constants';
+
+export class ToDoClearButton {
+  constructor(elem, todos) {
     this.elem = elem;
     this.button = null;
     this.eventEmitter = new EventEmitter();
+    this.todos = todos;
 
     this.init();
   }
@@ -30,7 +34,7 @@ class ToDoClearButton {
   }
 
   onClick = (e) => {
-    this.emit(EVENT_CLEAR_COMPLETED);
+    this.emit(EVENT_TYPE.EVENT_CLEAR_COMPLETED);
   }
 
   update() {
@@ -38,7 +42,7 @@ class ToDoClearButton {
   }
 
   isAtLeastOneCompleted() {
-    return todos.find((todo) => todo.completed);
+    return this.todos.find((todo) => todo.completed);
   }
 
   render() {

@@ -1,11 +1,18 @@
-class ToDoControls {
-  constructor(elem) {
+import { EventEmitter } from '../util/EventEmitter';
+import { ToDoCounter } from '../components/ToDoCounter';
+import { ToDoFilters } from '../components/ToDoFilters';
+import { ToDoClearButton } from '../components/ToDoClearButton';
+import { EVENT_TYPE } from '../constants';
+
+export class ToDoControls {
+  constructor(elem, todos) {
     this.controls = null;
     this.counter = null;
     this.filters = null;
     this.clearBtn = null;
     this.elem = elem;
     this.eventEmitter = new EventEmitter();
+    this.todos = todos;
 
     this.init();
   }
@@ -21,16 +28,16 @@ class ToDoControls {
 
     this.filters = new ToDoFilters(this.controls);
 
-    this.filters.on(EVENT_FILTER_APPLIED, (filteredTodos) => {
-      this.emit(EVENT_FILTER_APPLIED, filteredTodos);
+    this.filters.on(EVENT_TYPE.EVENT_FILTER_APPLIED, (filteredTodos) => {
+      this.emit(EVENT_TYPE.EVENT_FILTER_APPLIED, filteredTodos);
     });
 
     this.filters.render();
 
-    this.clearBtn = new ToDoClearButton(this.controls);
+    this.clearBtn = new ToDoClearButton(this.controls, this.todos);
 
-    this.clearBtn.on(EVENT_CLEAR_COMPLETED, () => {
-      this.emit(EVENT_CLEAR_COMPLETED);
+    this.clearBtn.on(EVENT_TYPE.EVENT_CLEAR_COMPLETED, () => {
+      this.emit(EVENT_TYPE.EVENT_CLEAR_COMPLETED);
     });
 
     this.clearBtn.render();
@@ -44,9 +51,13 @@ class ToDoControls {
     this.eventEmitter.emit(eventName, data)
   }
 
-  render() {
+  render(todos) {
+    this.todos = todos
     this.counter.update();
     this.clearBtn.update();
-    this.elem.append(this.controls);
+
+    if (!document.querySelector('.app-controls')) {
+      this.elem.append(this.controls);
+    }
   }
 }
