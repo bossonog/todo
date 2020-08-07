@@ -11,7 +11,7 @@ export class ToDoClearButton {
     this.init();
   }
 
-  init() {
+  init = () => {
     this.button = document.createElement('button');
 
     this.button.classList.add('app-clear-btn', 'button');
@@ -25,27 +25,29 @@ export class ToDoClearButton {
     this.button.addEventListener('click', this.onClick);
   }
 
-  on(eventName, fn) {
+  on = (eventName, fn) => {
     this.eventEmitter.on(eventName, fn)
   }
 
-  emit(eventName, data) {
+  emit = (eventName, data) => {
     this.eventEmitter.emit(eventName, data)
   }
 
   onClick = (e) => {
-    this.emit(EVENT_TYPE.EVENT_CLEAR_COMPLETED);
+    this.emit(EVENT_TYPE.CLEAR_COMPLETED);
   }
 
-  update() {
+  update = (todos) => {
+    this.todos = todos;
+
     this.button.hidden = !this.isAtLeastOneCompleted();
   }
 
-  isAtLeastOneCompleted() {
+  isAtLeastOneCompleted = () => {
     return this.todos.find((todo) => todo.completed);
   }
 
-  render() {
+  render = () => {
     this.elem.append(this.button);
   }
 }

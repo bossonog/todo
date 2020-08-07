@@ -1,6 +1,5 @@
 import { EVENT_TYPE } from '../constants';
 import { EventEmitter } from '../util/EventEmitter';
-import { validateToDoInput } from '../validation';
 
 export class ToDoItem {
   constructor(list, todo) {
@@ -15,7 +14,7 @@ export class ToDoItem {
     this.init();
   }
 
-  init() {
+  init = () => {
     this.li = document.createElement('li');
 
     this.li.classList.add('app-todo');
@@ -47,11 +46,11 @@ export class ToDoItem {
     this.li.append(this.remover);
   }
 
-  on(eventName, fn) {
+  on = (eventName, fn) => {
     this.eventEmitter.on(eventName, fn);
   }
 
-  emit(eventName, data) {
+  emit = (eventName, data) => {
     this.eventEmitter.emit(eventName, data);
   }
 
@@ -76,13 +75,13 @@ export class ToDoItem {
   }
 
   checkboxOnClick = (e) => {
-    this.emit(EVENT_TYPE.EVENT_TODO_EDITED, { ...this.todo, completed: !this.todo.completed });
+    this.emit(EVENT_TYPE.TODO_EDITED, { ...this.todo, completed: !this.todo.completed });
   }
 
   removerOnClick = (e) => {
     const id = +this.li.dataset.id;
 
-    this.emit(EVENT_TYPE.EVENT_TODO_REMOVED, id);
+    this.emit(EVENT_TYPE.TODO_REMOVED, id);
   }
 
   editBoxOnEnterPressed = (e) => {
@@ -100,24 +99,20 @@ export class ToDoItem {
   }
 
   editBoxOnInputValidation = (e) => {
-    const errorMsg = validateToDoInput(e.target.value);
+    // const errorMsg = validateToDoInput(e.target.value);
 
-    this.emit(EVENT_TYPE.EVENT_INPUT_VALIDATION, errorMsg);
+    // this.emit(EVENT_TYPE.INPUT_VALIDATION, errorMsg);
+
+    // const title = e.target.value;
+
+    // this.emit(EVENT_TYPE.TODO_EDITED, { ...this.todo, title });
   }
 
-  editBoxSubmit(title) {
-    // const errorMsg = validateToDoInput(title);
-
-    // if (errorMsg) {
-    //   return this.emit(EVENT_TYPE.EVENT_INPUT_VALIDATION, errorMsg);
-    // }
-
-    // this.emit(EVENT_TYPE.EVENT_INPUT_VALIDATION, errorMsg);
-
-    this.emit(EVENT_TYPE.EVENT_TODO_EDITED, { ...this.todo, title });
+  editBoxSubmit = (title) => {
+    this.emit(EVENT_TYPE.TODO_EDITED, { ...this.todo, title });
   }
 
-  render() {
+  render = () => {
     this.list.append(this.li);
   }
 }

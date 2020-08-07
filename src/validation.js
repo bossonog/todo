@@ -10,13 +10,21 @@ export const validateToDoInput = (str) => {
   return errorMsg;
 }
 
-export const isEmpty = (value, fieldName) => value ? '' : 'Field cant be empty'
+export const isValidToDoTitle = (value) => {
+  if (!/^\w+( \w+)*$/.test(value)) {
+    return 'The string must not contain symbols';
+  }
 
-export const isValidEmail = () => { }
+  return '';
+}
 
-export const isValidName = () => { }
+export const isEmpty = (value) => value ? '' : 'Field can`t be empty';
 
-export const isValidPassword = () => { }
+export const isValidEmail = () => { };
+
+export const isValidName = () => { };
+
+export const isValidPassword = () => { };
 
 // export const validateLogin = (login, password) => {
 //   let errorMsg = '';

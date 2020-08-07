@@ -1,13 +1,12 @@
 export class MainLayout {
-  constructor(root, isAuthenticated) {
+  constructor(root) {
     this.root = root;
     this.wrapper = null;
-    this.isAuthenticated = isAuthenticated;
 
     this.init();
   }
 
-  init() {
+  init = () => {
     this.wrapper = document.createElement('div');
 
     this.wrapper.classList.add('wrapper');
@@ -28,7 +27,7 @@ export class MainLayout {
 
     const logoutBtn = document.createElement('button');
 
-    logoutBtn.hidden = !this.isAuthenticated();
+    // logoutBtn.hidden = !this.isAuthenticated();
 
     logoutBtn.textContent = 'Logout';
 
@@ -67,7 +66,7 @@ export class MainLayout {
     this.wrapper.append(main);
   }
 
-  render() {
+  render = () => {
     this.root.append(this.wrapper);
   }
 }

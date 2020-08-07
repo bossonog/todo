@@ -11,7 +11,7 @@ export class ToDoAllButton {
     this.init();
   }
 
-  init() {
+  init = () => {
     this.button = document.createElement('span');
 
     this.button.classList.add('material-icons');
@@ -28,11 +28,11 @@ export class ToDoAllButton {
     this.button.addEventListener('click', this.onClick);
   }
 
-  on(eventName, fn) {
+  on = (eventName, fn) => {
     this.eventEmitter.on(eventName, fn);
   }
 
-  emit(eventName, data) {
+  emit = (eventName, data) => {
     this.eventEmitter.emit(eventName, data);
   }
 
@@ -42,15 +42,15 @@ export class ToDoAllButton {
 
       const checked = e.target.classList.contains('checked');
 
-      this.emit(EVENT_TYPE.EVENT_TODO_TOGGLED, checked);
+      this.emit(EVENT_TYPE.TODO_TOGGLED, checked);
     }
   }
 
-  isAllToDosCompleted() {
+  isAllToDosCompleted = () => {
     return this.todos.every((todo) => todo.completed);
   }
 
-  update(todos) {
+  update = (todos) => {
     this.todos = todos
     const checked = this.isAllToDosCompleted();
 
@@ -61,7 +61,7 @@ export class ToDoAllButton {
     this.button.classList.remove('checked');
   }
 
-  render() {
+  render = () => {
     this.elem.append(this.button);
   }
 }

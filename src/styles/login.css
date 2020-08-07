@@ -2,6 +2,14 @@
   display: flex;
   flex-wrap: wrap;
   padding: 40px 60px;
+  width: 350px;
+  margin: 0 auto;
+}
+
+/* .app-login {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 40px 60px;
   width: 400px;
   margin: 0 auto;
 }
@@ -28,4 +36,4 @@
 
 .app-login-control {
 
-}
+} */

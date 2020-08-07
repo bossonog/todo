@@ -1,28 +1,31 @@
-import { todos } from '../constants';
-
 export class ToDoCounter {
-  constructor(elem) {
+  constructor(elem, todos) {
     this.elem = elem;
     this.span = null;
-    this.counter = this.getActiveTodosQuantity();
+    this.counter = null;
+    this.todos = todos;
 
     this.init();
   }
 
-  init() {
+  init = () => {
+    this.counter = this.getActiveTodosQuantity();
+
     this.span = document.createElement('span');
 
     this.span.classList.add('app-todos-count');
     this.span.textContent = `${this.counter} item${this.isMultipleOrZero() ? 's' : ''} left`;
   }
 
-  update() {
+  update = (todos) => {
+    this.todos = todos;
+
     this.counter = this.getActiveTodosQuantity();
 
     this.span.textContent = `${this.counter} item${this.isMultipleOrZero() ? 's' : ''} left`;
   }
 
-  isMultipleOrZero() {
+  isMultipleOrZero = () => {
     const activeTodos = this.getActiveTodosQuantity();
 
     if (activeTodos === 0 || activeTodos > 1) {
@@ -31,11 +34,11 @@ export class ToDoCounter {
     return false;
   }
 
-  getActiveTodosQuantity() {
-    return todos.filter((todo) => !todo.completed).length;
+  getActiveTodosQuantity = () => {
+    return this.todos.filter((todo) => !todo.completed).length;
   }
 
-  render() {
+  render = () => {
     this.elem.append(this.span);
   }
 }

@@ -47,10 +47,6 @@ ul {
   padding: 14px 0;
 }
 
-.header-logout:hover {
-  text-decoration: underline;
-}
-
 .section {
   padding: 50px 0px;
 }
@@ -67,6 +63,11 @@ ul {
   cursor: pointer;
   background-color: unset;
   float: right;
+  display: none;
+}
+
+.header-logout:hover {
+  text-decoration: underline;
 }
 
 #app {

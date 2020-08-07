@@ -1,6 +1,5 @@
 import { EventEmitter } from '../util/EventEmitter';
 import { EVENT_TYPE } from '../constants';
-import { validateToDoInput } from '../validation';
 
 export class ToDoInput {
   constructor(elem) {
@@ -22,44 +21,47 @@ export class ToDoInput {
 
     this.input.addEventListener('keydown', this.onSubmit);
     this.input.addEventListener('input', this.onInput);
+
+    // this.input = new Input({
+    //   elem: this.elem,
+    //   type: 'text',
+    //   placeholder: 'What needs to be done?',
+    //   isFocused: true,
+    //   classList: ['app-new-todo', 'input'],
+    //   onInput: this.onInput,
+    //   onSubmit: this.onSubmit,
+    //   validationFunctions: [isEmpty, isValidToDoTitle],
+    // });
   }
 
-  on(eventName, fn) {
+  on = (eventName, fn) => {
     this.eventEmitter.on(eventName, fn)
   }
 
-  emit(eventName, data) {
+  emit = (eventName, data) => {
     this.eventEmitter.emit(eventName, data)
   }
 
   onSubmit = (e) => {
     if (e.keyCode === 13) {
-      const errorMsg = validateToDoInput(e.target.value);
-
-      if (errorMsg) {
-        return this.emit(EVENT_TYPE.EVENT_INPUT_VALIDATION, errorMsg);
-      }
-
-      this.emit(EVENT_TYPE.EVENT_INPUT_VALIDATION, errorMsg);
-
       const title = e.target.value;
       const completed = false;
 
       const todo = { title, completed };
 
-      e.target.value = '';
-
-      this.emit(EVENT_TYPE.EVENT_TODO_ADDED, todo);
+      this.emit(EVENT_TYPE.TODO_ADDED, todo);
     }
   }
 
   onInput = (e) => {
-    const errorMsg = validateToDoInput(e.target.value);
-
-    this.emit(EVENT_TYPE.EVENT_INPUT_VALIDATION, errorMsg);
+    this.emit(EVENT_TYPE.INPUT_VALIDATION, e.target.value);
   }
 
-  render() {
+  clearInput = () => {
+    this.input.value = '';
+  }
+
+  render = () => {
     this.elem.append(this.input);
   }
 } 

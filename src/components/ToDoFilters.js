@@ -11,7 +11,7 @@ export class ToDoFilters {
     this.init();
   }
 
-  init() {
+  init = () => {
     this.filters = document.createElement('div');
 
     this.filters.classList.add('app-filters');
@@ -29,7 +29,7 @@ export class ToDoFilters {
       activeBtn.classList.remove('active');
       completedBtn.classList.remove('active');
 
-      this.emit(EVENT_TYPE.EVENT_FILTER_APPLIED, this.filterState);
+      this.emit(EVENT_TYPE.FILTER_APPLIED, this.filterState);
     }
 
     allBtn.addEventListener('click', allBtnClickHandler);
@@ -47,7 +47,7 @@ export class ToDoFilters {
       allBtn.classList.remove('active');
       completedBtn.classList.remove('active');
 
-      this.emit(EVENT_TYPE.EVENT_FILTER_APPLIED, this.filterState);
+      this.emit(EVENT_TYPE.FILTER_APPLIED, this.filterState);
     }
 
     activeBtn.addEventListener('click', activeBtnClickHandler);
@@ -65,7 +65,7 @@ export class ToDoFilters {
       allBtn.classList.remove('active');
       activeBtn.classList.remove('active');
 
-      this.emit(EVENT_TYPE.EVENT_FILTER_APPLIED, this.filterState);
+      this.emit(EVENT_TYPE.FILTER_APPLIED, this.filterState);
     }
 
     completedBtn.addEventListener('click', completedBtnClickHandler);
@@ -75,15 +75,15 @@ export class ToDoFilters {
     this.filters.append(completedBtn);
   }
 
-  on(eventName, fn) {
+  on = (eventName, fn) => {
     this.eventEmitter.on(eventName, fn)
   }
 
-  emit(eventName, data) {
+  emit = (eventName, data) => {
     this.eventEmitter.emit(eventName, data)
   }
 
-  render() {
+  render = () => {
     this.elem.append(this.filters);
   }
 }
