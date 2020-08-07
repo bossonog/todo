@@ -1,8 +1,6 @@
-import './styles/main.css';
-import './styles/input.css';
-import './styles/login.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import { App } from './App';
+import App from './App';
 
-const app = new App();
-app.render();
+ReactDOM.render(<App />, document.getElementById('root'));

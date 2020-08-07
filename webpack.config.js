@@ -68,7 +68,7 @@ module.exports = () => ({
       chunkFilename: "[id].css",
     }),
   ],
-  devServer: {
-    open: true,
+  resolve: {
+    extensions: ["*", ".js", ".jsx"],
   },
 });

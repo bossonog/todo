@@ -1,25 +1,14 @@
-import { todos, EVENT_TYPE } from './constants';
-import { Home } from './pages/Home';
-import { Login } from './pages/Login';
+import React from 'react';
 
-export class App {
-  constructor() {
-    this.root = document.getElementById('root');
-    this.todos = todos;
-  }
+import './styles/main.scss';
 
-  isAuthenticated() {
-    return Boolean(localStorage.getItem('auth'));
-  }
+import { Layout } from './components/Layout';
+import { ToDos } from './components/ToDos';
 
-  render() {
-    const login = new Login(this.root, this.isAuthenticated);
-    const home = new Home(this.root, this.isAuthenticated);
+const App = () => (
+  <Layout>
+    <ToDos />
+  </Layout>
+);
 
-    login.on(EVENT_TYPE.LOGIN_SUCCESS, () => {
-      home.render();
-    });
-
-    this.isAuthenticated() ? home.render() : login.render();
-  }
-}
+export default App;
