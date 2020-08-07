@@ -1,5 +1,5 @@
-import { EVENT_TYPE } from '../constants';
-import { EventEmitter } from '../util/EventEmitter';
+import { EVENT_TYPE } from '../../../constants';
+import { EventEmitter } from '../../../util/EventEmitter';
 
 export class ToDoItem {
   constructor(list, todo) {
@@ -99,13 +99,7 @@ export class ToDoItem {
   }
 
   editBoxOnInputValidation = (e) => {
-    // const errorMsg = validateToDoInput(e.target.value);
 
-    // this.emit(EVENT_TYPE.INPUT_VALIDATION, errorMsg);
-
-    // const title = e.target.value;
-
-    // this.emit(EVENT_TYPE.TODO_EDITED, { ...this.todo, title });
   }
 
   editBoxSubmit = (title) => {

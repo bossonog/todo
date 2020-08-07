@@ -1,5 +1,5 @@
-import { EventEmitter } from '../util/EventEmitter';
-import { EVENT_TYPE, FILTER_TYPE } from '../constants';
+import { EventEmitter } from '../../../util/EventEmitter';
+import { EVENT_TYPE, FILTER_TYPE } from '../../../constants';
 
 export class ToDoFilters {
   constructor(elem) {

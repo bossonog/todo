@@ -3,17 +3,18 @@ import { EventEmitter } from '../../util/EventEmitter';
 import { MainLayout } from '../../components/MainLayout';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
+import { USER, EVENT_TYPE } from '../../constants';
 
 export class Login {
   constructor(elem, isAuthenticated) {
     this.elem = elem;
     this.eventEmitter = new EventEmitter();
-    this.usernameInput = null;
-    this.usernameErrorBox = null;
-    this.passwordInput = null;
-    this.passwordErrorBox = null;
-    this.errorBox = null;
     this.isAuthenticated = isAuthenticated;
+
+    this.form = null;
+    this.usernameInput = null;
+    this.passwordInput = null;
+    this.errorBox = null;
   }
 
   on = (eventName, fn) => {
@@ -24,152 +25,83 @@ export class Login {
     this.eventEmitter.emit(eventName, data)
   }
 
-  usernameOnInput = (e) => {
-    // let errorMsg = isEmpty(e.target.value);
-
-    // if (errorMsg) {
-    //   e.target.classList.add('error');
-    //   this.updateUsernameErrorBox(errorMsg);
-    // } else {
-    //   e.target.classList.remove('error');
-    //   this.updateUsernameErrorBox(errorMsg);
-    // }
-  }
-
-  passwordOnInput = (e) => {
-    // let errorMsg = isEmpty(e.target.value);
-
-    // if (errorMsg) {
-    //   e.target.classList.add('error');
-    //   this.updatePasswordErrorBox(errorMsg);
-    // } else {
-    //   e.target.classList.remove('error');
-    //   this.updatePasswordErrorBox('');
-    // }
+  onInput = () => {
+    this.errorBox.textContent = '';
   }
 
   onSubmit = (e) => {
-    // const username = this.usernameInput.value;
-    // const password = this.passwordInput.value;
+    e.preventDefault();
 
-    // const usernameError = validateUsername(username);
-    // const passwordError = validatePassword(password);
+    const username = this.usernameInput.value;
+    const password = this.passwordInput.value;
 
-    // if (usernameError !== '' || passwordError !== '') {
-    //   this.updateUsernameErrorBox(usernameError);
-    //   this.updatePasswordErrorBox(passwordError);
+    const usernameError = this.usernameInput.updateError();
+    const passwordError = this.passwordInput.updateError();
 
-    //   return;
-    // }
+    if (usernameError || passwordError) return;
 
-    // if (username === USER.username && password === USER.password) {
-    //   localStorage.setItem('auth', true);
+    if (username === USER.username && password === USER.password) {
+      localStorage.setItem('auth', true);
 
-    //   this.emit(EVENT_TYPE.LOGIN_SUCCESS);
-    // } else {
-    //   this.errorBox.textContent = 'There is no user with provided credentials';
-    // }
-
-    e.stopPropagation();
+      this.emit(EVENT_TYPE.LOGIN_SUCCESS);
+    } else {
+      this.errorBox.textContent = 'There is no user with provided credentials';
+    }
   }
-
-  // updateUsernameErrorBox(errorMsg) {
-  //   this.usernameErrorBox.textContent = errorMsg;
-  // }
-
-  // updatePasswordErrorBox(errorMsg) {
-  //   this.passwordErrorBox.textContent = errorMsg;
-  // }
-
-  // updateErrorMessage(errorMsg) {
-  //   this.errorBox.textContent = errorMsg;
-  // }
 
   render = () => {
     this.elem.innerHTML = '';
 
-    const mainLayout = new MainLayout(this.elem);
+    const mainLayout = new MainLayout(this.elem, this.isAuthenticated());
 
     mainLayout.render();
 
     const app = document.getElementById('app');
 
-    const form = document.createElement('form');
+    this.form = document.createElement('form');
 
-    form.addEventListener('submit', this.onSubmit);
+    this.form.addEventListener('submit', this.onSubmit);
 
-    form.classList.add('app-login');
+    this.form.classList.add('app-login');
 
-    const usernameInput = new Input({
-      elem: form,
+    this.usernameInput = new Input({
+      elem: this.form,
       type: 'text',
       placeholder: 'Login',
       classList: ['app-login-control'],
       validationFunctions: [isEmpty],
+      onInput: this.onInput,
     });
 
-    usernameInput.render();
+    this.usernameInput.render();
 
-    const passwordInput = new Input({
-      elem: form,
-      type: 'text',
+    this.passwordInput = new Input({
+      elem: this.form,
+      type: 'password',
       placeholder: 'Password',
       classList: ['app-login-control'],
       validationFunctions: [isEmpty],
+      onInput: this.onInput,
     });
 
-    passwordInput.render();
+    this.passwordInput.render();
 
-    const buttonSubmit = new Button({
-      elem: form,
+    this.buttonSubmit = new Button({
+      elem: this.form,
       type: 'submit',
       title: 'Sign in',
-      classList: ['app-login-control'],
+      classList: ['app-login-button'],
+      onClick: this.onSubmit,
     });
 
-    buttonSubmit.render();
+    this.buttonSubmit.render();
 
-    // this.usernameInput = document.createElement('input');
-    // this.usernameErrorBox = document.createElement('div');
+    this.errorBox = document.createElement('div');
 
-    // this.usernameInput.type = 'text';
-    // this.usernameInput.placeholder = 'Login';
+    this.errorBox.classList.add('app-login-error');
 
-    // this.usernameInput.classList.add('app-login-control');
-    // this.usernameErrorBox.classList.add('app-input-error');
+    this.form.append(this.errorBox);
 
-    // this.usernameInput.addEventListener('input', this.usernameOnInput);
-
-    // this.passwordInput = document.createElement('input');
-    // this.passwordErrorBox = document.createElement('div');
-
-    // this.passwordInput.type = 'password';
-    // this.passwordInput.placeholder = 'Password';
-
-    // this.passwordInput.classList.add('app-login-control');
-    // this.passwordErrorBox.classList.add('app-input-error');
-
-    // this.passwordInput.addEventListener('input', this.passwordOnInput);
-
-    // const signInBtn = document.createElement('button');
-    // this.errorBox = document.createElement('div');
-
-    // signInBtn.textContent = 'Sign In';
-
-    // signInBtn.classList.add('app-login-control');
-    // this.errorBox.classList.add('app-input-error');
-
-    // signInBtn.addEventListener('click', this.onSubmit);
-
-    // div.append(this.usernameInput);
-    // div.append(this.usernameErrorBox);
-
-    // div.append(this.passwordInput);
-    // div.append(this.passwordErrorBox);
-
-    // div.append(signInBtn);
-    // div.append(this.errorBox);
-
-    app.append(form);
+    app.append(this.form);
   }
 }

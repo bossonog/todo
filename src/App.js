@@ -13,14 +13,13 @@ export class App {
   }
 
   render() {
-    const login = new Login(this.root);
-    const home = new Home(this.root);
+    const login = new Login(this.root, this.isAuthenticated);
+    const home = new Home(this.root, this.isAuthenticated);
 
     login.on(EVENT_TYPE.LOGIN_SUCCESS, () => {
       home.render();
     });
 
-    // this.isAuthenticated() ? home.render() : login.render();
-    login.render();
+    this.isAuthenticated() ? home.render() : login.render();
   }
 }

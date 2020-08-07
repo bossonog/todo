@@ -6,6 +6,7 @@ export class Input {
     classList = '',
     isFocused = false,
     validationFunctions = [],
+    value = '',
     onInput = () => { },
     onSubmit = () => { },
   }) {
@@ -15,6 +16,7 @@ export class Input {
     this.classList = classList;
     this.isFocused = isFocused;
     this.validationFunctions = validationFunctions;
+    this.value = value;
     this.onInput = onInput;
     this.onSubmit = onSubmit;
 
@@ -52,11 +54,28 @@ export class Input {
   }
 
   handleChange = (e) => {
-    const error = this.validateValue(e.target.value)
+    this.value = e.target.value;
+
+    const error = this.validateValue(this.value);
 
     if (!error) {
       this.errorBox.textContent = '';
+
       return this.onInput(e);
+    }
+
+    this.errorBox.textContent = error;
+  }
+
+  handleSubmit = (e) => {
+    this.value = e.target.value;
+
+    const error = this.validateValue(this.value);
+
+    if (!error) {
+      this.errorBox.textContent = '';
+
+      return this.onSubmit(e);
     }
 
     this.errorBox.textContent = error;
@@ -67,20 +86,17 @@ export class Input {
       const error = validate(value);
 
       if (error) {
-        return error
+        return error;
       }
     }
   }
 
-  handleSubmit = (e) => {
-    const error = this.validateValue(e.target.value)
-
-    if (!error) {
-      this.errorBox.textContent = '';
-      return this.onSubmit(e);
-    }
+  updateError = () => {
+    const error = this.validateValue(this.value);
 
     this.errorBox.textContent = error;
+
+    return error;
   }
 
   render = () => {

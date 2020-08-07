@@ -1,6 +1,6 @@
 import { ToDoItem } from '../components/ToDoItem';
-import { EventEmitter } from '../util/EventEmitter';
-import { EVENT_TYPE } from '../constants';
+import { EventEmitter } from '../../../util/EventEmitter';
+import { EVENT_TYPE } from '../../../constants';
 
 export class ToDoList {
   constructor(elem) {

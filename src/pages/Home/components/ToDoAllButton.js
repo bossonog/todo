@@ -1,5 +1,5 @@
-import { EventEmitter } from '../util/EventEmitter';
-import { EVENT_TYPE } from '../constants';
+import { EventEmitter } from '../../../util/EventEmitter';
+import { EVENT_TYPE } from '../../../constants';
 
 export class ToDoAllButton {
   constructor(elem, todos) {
@@ -51,7 +51,8 @@ export class ToDoAllButton {
   }
 
   update = (todos) => {
-    this.todos = todos
+    this.todos = todos;
+
     const checked = this.isAllToDosCompleted();
 
     if (checked) {

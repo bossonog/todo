@@ -1,8 +1,8 @@
-import { EventEmitter } from '../util/EventEmitter';
-import { ToDoCounter } from '../components/ToDoCounter';
-import { ToDoFilters } from '../components/ToDoFilters';
-import { ToDoClearButton } from '../components/ToDoClearButton';
-import { EVENT_TYPE } from '../constants';
+import { EventEmitter } from '../../../util/EventEmitter';
+import { ToDoCounter } from './ToDoCounter';
+import { ToDoFilters } from './ToDoFilters';
+import { ToDoClearButton } from './ToDoClearButton';
+import { EVENT_TYPE } from '../../../constants';
 
 export class ToDoControls {
   constructor(elem, todos) {

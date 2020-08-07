@@ -19,39 +19,3 @@ export const isValidToDoTitle = (value) => {
 }
 
 export const isEmpty = (value) => value ? '' : 'Field can`t be empty';
-
-export const isValidEmail = () => { };
-
-export const isValidName = () => { };
-
-export const isValidPassword = () => { };
-
-// export const validateLogin = (login, password) => {
-//   let errorMsg = '';
-
-//   if (!login || !password) {
-//     errorMsg = 'The login or password must not be empty';
-//   }
-
-//   return errorMsg;
-// }
-
-// export const validateUsername = (username) => {
-//   let errorMsg = '';
-
-//   if (!username) {
-//     errorMsg = 'The login must not be empty';
-//   }
-
-//   return errorMsg;
-// }
-
-// export const validatePassword = (password) => {
-//   let errorMsg = '';
-
-//   if (!password) {
-//     errorMsg = 'The password must not be empty';
-//   }
-
-//   return errorMsg;
-// }

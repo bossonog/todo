@@ -58,12 +58,14 @@ ul {
   padding: 0px 20px;
 }
 
+.header-content {
+  text-align: end;
+}
+
 .header-logout {
   border: none;
   cursor: pointer;
   background-color: unset;
-  float: right;
-  display: none;
 }
 
 .header-logout:hover {

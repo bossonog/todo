@@ -1,9 +1,9 @@
 import { todos, FILTER_TYPE, EVENT_TYPE } from '../../constants';
 import { MainLayout } from '../../components/MainLayout';
-import { ToDoInput } from '../../components/ToDoInput';
-import { ToDoList } from '../../components/ToDoList';
-import { ToDoAllButton } from '../../components/ToDoAllButton';
-import { ToDoControls } from '../../components/ToDoControls';
+import { ToDoInput } from './components/ToDoInput';
+import { ToDoList } from './components/ToDoList';
+import { ToDoAllButton } from './components/ToDoAllButton';
+import { ToDoControls } from './components/ToDoControls';
 import { validateToDoInput } from '../../validation';
 
 export class Home {
@@ -17,7 +17,7 @@ export class Home {
   render = () => {
     this.elem.innerHTML = '';
 
-    const mainLayout = new MainLayout(this.elem, this.isAuthenticated);
+    const mainLayout = new MainLayout(this.elem, this.isAuthenticated());
 
     mainLayout.render();
 
@@ -74,8 +74,10 @@ export class Home {
       const errorMsg = validateToDoInput(todo.title);
 
       if (errorMsg) {
-        return this.updateErrorMessage(errorMsg);;
+        return this.updateErrorMessage(errorMsg);
       }
+
+      this.updateErrorMessage(errorMsg);
 
       const { id, completed, title } = todo;
 
@@ -109,6 +111,7 @@ export class Home {
 
       const updatedTodos = this.getTodosByFilterState()
 
+      toDoAllButton.update(updatedTodos);
       toDoList.render(updatedTodos);
       toDoControls.render(updatedTodos);
     });
