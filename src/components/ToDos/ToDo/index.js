@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import './toDo.scss';
+import './index.scss';
 
-const ToDo = ({ todo }) => (
-  <li className={`todo ${todo.completed && 'completed'}`}>
-    <span className="todo-checkbox material-icons">{todo.completed ? 'check_box' : 'check_box_outline_blank'}</span>
+const ToDo = ({ todo, removeToDo, changeToDo }) => (
+  <li className={`todo ${todo.completed && 'completed'}`} onDoubleClick={() => {}}>
+    <span className="todo-checkbox material-icons" onClick={() => changeToDo(todo.id)}>
+      {todo.completed ? 'check_box' : 'check_box_outline_blank'}
+    </span>
     <span className="todo-title">{todo.title}</span>
-    <button className="todo-remove button" type="button">X</button>
+    <span
+      className="todo-remove material-icons"
+      onClick={() => removeToDo(todo.id)}
+    >
+      delete
+    </span>
   </li>
 );
 

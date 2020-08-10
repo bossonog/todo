@@ -2,13 +2,16 @@ import React from 'react';
 
 import './styles/main.scss';
 
-import { todos } from './constants';
-
-import { Layout, ToDos } from './components';
+import { Switch, Route, Link } from 'react-router-dom';
+import { Layout } from './components';
+import { Home, Login } from './pages';
 
 const App = () => (
   <Layout>
-    <ToDos todos={todos} />
+    <Switch>
+      <Route path="/login" component={Login} />
+      <Route path="/" component={Home} />
+    </Switch>
   </Layout>
 );
 

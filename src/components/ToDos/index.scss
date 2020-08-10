@@ -10,6 +10,10 @@
 }
 
 #todos-checkall {
+  &.checked {
+    color: #4d4d4d;
+  }
+
   cursor: default;
   font-size: 40px;
   color: #6e6e6e;
@@ -27,4 +31,25 @@
 .todos-list {
   background-color: #fff;
   border-top: 1px solid #e6e6e6;
+}
+
+.todos-controls {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  justify-content: space-between;
+}
+
+.todos-counter {
+  color: #4d4d4d;
+}
+
+.todos-clear-btn {
+  &:hover {
+    text-decoration: underline;
+  }
+
+  border: none;
+  cursor: pointer;
+  background-color: unset;
 }

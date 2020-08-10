@@ -2,6 +2,8 @@ import React from 'react';
 
 import Header from '../Header';
 
+import './index.scss';
+
 const Layout = ({ children }) => (
   <>
     <Header />
