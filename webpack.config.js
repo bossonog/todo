@@ -15,6 +15,9 @@ module.exports = () => ({
     filename: '[name].[contenthash].bundle.js',
     path: path.resolve('build'),
   },
+  devServer: {
+    port: 3000,
+  },
   module: {
     rules: [
       {
