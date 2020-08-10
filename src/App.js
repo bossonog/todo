@@ -2,12 +2,13 @@ import React from 'react';
 
 import './styles/main.scss';
 
-import { Layout } from './components/Layout';
-import { ToDos } from './components/ToDos';
+import { todos } from './constants';
+
+import { Layout, ToDos } from './components';
 
 const App = () => (
   <Layout>
-    <ToDos />
+    <ToDos todos={todos} />
   </Layout>
 );
 
