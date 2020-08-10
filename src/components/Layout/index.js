@@ -1,3 +1,14 @@
-import { Layout } from './Layout';
+import React from 'react';
 
-export { Layout };
+import Header from '../Header';
+
+const Layout = ({ children }) => (
+  <>
+    <Header />
+    <main className="main">
+      <div className="container">{children}</div>
+    </main>
+  </>
+);
+
+export default Layout;
