@@ -8,3 +8,41 @@
   font-weight: 100;
   color: #b8c9d0;
 }
+
+.header-nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-list {
+  display: flex;
+  align-items: center;
+}
+
+.header-item {
+  
+}
+
+.header-logout {
+  &:hover{
+    text-decoration: underline;
+  }
+
+  border: none;
+  cursor: pointer;
+  background-color: unset;
+}
+
+.header-link {
+  text-decoration: none;
+  display: block;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 10px;
+  color: #4d4d4d;
+  
+  &.active {
+    color: #fff;
+    background-color: #b8c9d0;
+  }
+}

@@ -15,9 +15,10 @@ const Input = ({
   className,
   validationFunctions = [],
   value,
+  name,
   isFocused,
-  onSubmit,
-  onInput,
+  onSubmit = () => {},
+  onInput = () => {},
   onBlur,
 }) => {
   const [error, setError] = useState('');
@@ -70,6 +71,7 @@ const Input = ({
         onInput={handleInput}
         onBlur={onBlur}
         ref={inputRef}
+        name={name}
       />
       <div className="input-error">
         {error}
