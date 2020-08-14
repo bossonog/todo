@@ -56,7 +56,7 @@ const Home = () => {
         return setToDoError(errorMsg);
       }
 
-      const id = todos.length ? todos[todos.length - 1].id + 1 : 0;
+      const id = todos.length ? todos[todos.length - 1].id + 1 : 1;
 
       e.target.value = '';
 
@@ -118,9 +118,9 @@ const Home = () => {
     <ToDos
       todos={getToDosByFilterState()}
       removeToDo={removeToDo}
-      addToDo={addToDo}
-      toggleAllToDos={toggleAllToDos}
-      clearCompleted={clearCompleted}
+      onKeyDown={addToDo}
+      onAllBtnClick={toggleAllToDos}
+      onClearBtnClick={clearCompleted}
       hasAtLeastOneCompleted={hasAtLeastOneCompleted()}
       setFilterType={setFilterType}
       changeToDo={changeToDo}

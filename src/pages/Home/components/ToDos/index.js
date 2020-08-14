@@ -8,14 +8,14 @@ import { TODOS_FILTER_TYPE_OPTIONS } from '../../../../constants/filter';
 
 const ToDos = ({
   todos,
-  addToDo,
+  onKeyDown,
   removeToDo,
   changeToDo,
-  toggleAllToDos,
+  onAllBtnClick,
   setFilterType,
   itemsLeftString,
   isAllCompleted,
-  clearCompleted,
+  onClearBtnClick,
   hasAtLeastOneCompleted,
   filterType,
   toDoError,
@@ -29,7 +29,7 @@ const ToDos = ({
       <div className="todos-header">
         <span
           className={`material-icons todos-checkall ${isAllCompleted ? 'checked' : ''}`}
-          onClick={toggleAllToDos}
+          onClick={() => { onAllBtnClick(); setEditingToDo(0); }}
         >
           check_box
         </span>
@@ -37,7 +37,7 @@ const ToDos = ({
           className="todos-new-todo input"
           type="text"
           placeholder="What needs to be done?"
-          onKeyDown={addToDo}
+          onKeyDown={(e) => { onKeyDown(e); setEditingToDo(0); }}
           onInput={onInput}
         />
       </div>
@@ -65,7 +65,7 @@ const ToDos = ({
         <button
           className={`todos-clear-btn button ${hasAtLeastOneCompleted ? '' : 'hidden'}`}
           type="button"
-          onClick={clearCompleted}
+          onClick={() => { onClearBtnClick(); setEditingToDo(0); }}
         >
           Clear completed
         </button>
