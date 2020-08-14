@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import Header from '../Header';
 
@@ -13,4 +13,4 @@ const Layout = ({ children }) => (
   </>
 );
 
-export default Layout;
+export default memo(Layout);

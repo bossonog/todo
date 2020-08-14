@@ -1,3 +1,3 @@
 export { default as Header } from './Header';
 export { default as Layout } from './Layout';
-export { default as ToDos } from './ToDos';
+export { default as Input } from './Input';

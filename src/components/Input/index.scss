@@ -1,0 +1,17 @@
+.input {
+  width: 100%;
+}
+
+.input-control {
+  width: 100%;
+}
+
+.input-control, .input-error {
+  margin-bottom: 5px;
+}
+
+.input-error {
+  font-size: 14px;
+  height: 17px;
+  color: #af5b5e;
+}

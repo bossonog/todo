@@ -2,7 +2,7 @@ import React from 'react';
 
 import './styles/main.scss';
 
-import { Switch, Route, Link } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { Layout } from './components';
 import { Home, Login } from './pages';
 

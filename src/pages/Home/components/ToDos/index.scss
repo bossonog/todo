@@ -2,6 +2,14 @@
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
 }
 
+.todos-error {
+  padding: 10px 15px;
+  color: #af5b5e;
+  display: flex;
+  align-items: center;
+  height: 43px;
+}
+
 .todos-header {
   display: flex;
   align-items: center;
@@ -9,7 +17,7 @@
   background-color: #fff;
 }
 
-#todos-checkall {
+.todos-checkall {
   &.checked {
     color: #4d4d4d;
   }
@@ -26,6 +34,7 @@
   font-size: 24px;
   background-color: unset;
   margin: 0px 10px;
+  overflow: auto;
 }
 
 .todos-list {

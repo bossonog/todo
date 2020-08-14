@@ -27,9 +27,20 @@
   margin: 0px 10px;
 }
 
+.todo-edit-box {
+  width: 100%;
+  margin: 0px 10px;
+  overflow: auto;
+}
+
 .todo-remove {
   .todo:hover & {
-    display: block;
+    // display: block;
+    visibility: unset;
+  }
+
+  &.hidden {
+    display: none;
   }
 
   &:hover {
@@ -40,5 +51,6 @@
   color: #cc9a9a;
   background: none;
   transition: color 0.2s ease-out;
-  display: none;
+  // display: none;
+  visibility: hidden;
 }
