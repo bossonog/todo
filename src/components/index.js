@@ -4,4 +4,4 @@ export { default as Input } from './Input';
 export { default as Button } from './Button';
 export { default as ErrorBox } from './ErrorBox';
 export { default as PrivateRoute } from './PrivateRoute';
-export { default as PublicRoute } from './PublicRoute';
+export { default as Loader } from './Loader';

@@ -4,10 +4,10 @@ import './index.scss';
 
 import Nav from './Nav';
 
-const Header = ({ isAuthenticated, onLogoutBtnClick }) => (
+const Header = () => (
   <header className="header">
     <div className="container">
-      <Nav isAuthenticated={isAuthenticated} onClick={onLogoutBtnClick} />
+      <Nav />
       <h1 className="title header-title">todos</h1>
     </div>
   </header>

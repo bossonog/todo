@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 import './styles/main.scss';
 
-import { Switch } from 'react-router-dom';
-import { Layout, PrivateRoute, PublicRoute } from './components';
+import { Switch, Route } from 'react-router-dom';
+import { Layout, PrivateRoute, Loader } from './components';
 import { Home, Login } from './pages';
+import { AuthenticationContext } from './config';
 
 import ROUTES from './routes';
 
@@ -19,7 +20,7 @@ const App = () => {
 
     setTimeout(() => {
       setIsReady(true);
-    }, 3000);
+    }, 1500);
   }, [isReady, isAuthenticated]);
 
   const logout = () => {
@@ -28,19 +29,20 @@ const App = () => {
   };
 
   return (
-    <Layout isAuthenticated={isAuthenticated} onLogoutBtnClick={logout}>
-      {isReady ? (
-        <Switch>
-          {/* <Route path={ROUTES.AUTH.LOGIN}>
-            <Login authorize={setIsAuthenticated} />
-          </Route> */}
-          <PublicRoute path={ROUTES.AUTH.LOGIN} component={Login} />
-          <PrivateRoute path={ROUTES.ROOT} isAuthenticated={isAuthenticated} component={Home} />
-        </Switch>
-      ) : (
-        'Loading...'
-      )}
-    </Layout>
+    <AuthenticationContext.Provider value={{ isAuthenticated, logout }}>
+      <Layout>
+        {isReady ? (
+          <Switch>
+            <Route path={ROUTES.AUTH.LOGIN}>
+              <Login login={setIsAuthenticated} />
+            </Route>
+            <PrivateRoute path={ROUTES.ROOT} component={Home} />
+          </Switch>
+        ) : (
+          <Loader />
+        )}
+      </Layout>
+    </AuthenticationContext.Provider>
   );
 };
 

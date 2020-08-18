@@ -1,6 +1,4 @@
-import React, {
-  useState, useEffect, memo,
-} from 'react';
+import React, { useState, useEffect, memo } from 'react';
 
 import { ToDos } from './components';
 
@@ -10,16 +8,6 @@ import { processValidationsArray, isEmpty, hasSymbols } from '../../util/validat
 
 const Home = () => {
   const [todos, setToDos] = useState([
-    {
-      id: 1,
-      title: 'todo 1',
-      completed: false,
-    },
-    {
-      id: 2,
-      title: 'todo 2',
-      completed: false,
-    },
     {
       id: 3,
       title: 'todo 3',

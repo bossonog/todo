@@ -20,17 +20,17 @@
 }
 
 .header-item {
-  
 }
 
 .header-logout {
-  &:hover{
+  &:hover {
     text-decoration: underline;
   }
 
   border: none;
   cursor: pointer;
   background-color: unset;
+  color: #b8c9d0;
 }
 
 .header-link {
@@ -39,8 +39,8 @@
   font-weight: bold;
   text-transform: uppercase;
   padding: 10px;
-  color: #4d4d4d;
-  
+  color: #b8c9d0;
+
   &.active {
     color: #fff;
     background-color: #b8c9d0;

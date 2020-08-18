@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { NavLink } from 'react-router-dom';
+import { AuthenticationContext } from '../../config';
 
-const Nav = ({ isAuthenticated, onClick }) => (
-  <nav className="header-nav">
-    <ul className="header-list">
-      <li className="header-item">
-        <NavLink to="/" exact className="header-link">Home</NavLink>
-      </li>
-    </ul>
-    {isAuthenticated && <button type="button" className="header-logout" onClick={onClick}>Logout</button>}
-  </nav>
-);
+const Nav = () => {
+  const { isAuthenticated, logout } = useContext(AuthenticationContext);
+
+  return (
+    <nav className="header-nav">
+      <ul className="header-list">
+        <li className="header-item">
+          <NavLink to="/" exact className="header-link">
+            Home
+          </NavLink>
+        </li>
+      </ul>
+      {isAuthenticated && (
+        <button type="button" className="header-logout" onClick={logout}>
+          Logout
+        </button>
+      )}
+    </nav>
+  );
+};
 
 export default Nav;

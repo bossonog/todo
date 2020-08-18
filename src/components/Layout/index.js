@@ -4,9 +4,9 @@ import Header from '../Header';
 
 import './index.scss';
 
-const Layout = ({ children, onLogoutBtnClick, isAuthenticated }) => (
+const Layout = ({ children }) => (
   <>
-    <Header onLogoutBtnClick={onLogoutBtnClick} isAuthenticated={isAuthenticated} />
+    <Header />
     <main className="main">
       <div className="container">{children}</div>
     </main>

@@ -1,9 +1,4 @@
-import React, {
-  useRef,
-  useEffect,
-  memo,
-  useState,
-} from 'react';
+import React, { useRef, useEffect, memo, useState } from 'react';
 
 import { processValidationsArray } from '../../util/validations';
 
@@ -20,6 +15,7 @@ const Input = ({
   onSubmit = () => {},
   onInput = () => {},
   onBlur,
+  error: testError,
 }) => {
   const [error, setError] = useState('');
   const inputRef = useRef(null);
@@ -73,9 +69,7 @@ const Input = ({
         ref={inputRef}
         name={name}
       />
-      <div className="input-error">
-        {error}
-      </div>
+      <div className="input-error">{testError || error}</div>
     </div>
   );
 };
