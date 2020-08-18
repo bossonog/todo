@@ -1,25 +1,49 @@
-import { todos, EVENT_TYPE } from './constants';
-import { Home } from './pages/Home';
-import { Login } from './pages/Login';
+import React, { useState, useEffect } from 'react';
 
-export class App {
-  constructor() {
-    this.root = document.getElementById('root');
-    this.todos = todos;
-  }
+import './styles/main.scss';
 
-  isAuthenticated() {
-    return Boolean(localStorage.getItem('auth'));
-  }
+import { Switch, Route } from 'react-router-dom';
+import { Layout, PrivateRoute, Loader } from './components';
+import { Home, Login } from './pages';
+import { AuthenticationContext } from './config';
 
-  render() {
-    const login = new Login(this.root, this.isAuthenticated);
-    const home = new Home(this.root, this.isAuthenticated);
+import ROUTES from './routes';
 
-    login.on(EVENT_TYPE.LOGIN_SUCCESS, () => {
-      home.render();
-    });
+const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
-    this.isAuthenticated() ? home.render() : login.render();
-  }
-}
+  useEffect(() => {
+    if (localStorage.getItem('auth')) {
+      setIsAuthenticated(true);
+    }
+
+    setTimeout(() => {
+      setIsReady(true);
+    }, 1500);
+  }, [isReady, isAuthenticated]);
+
+  const logout = () => {
+    localStorage.removeItem('auth');
+    setIsAuthenticated(false);
+  };
+
+  return (
+    <AuthenticationContext.Provider value={{ isAuthenticated, logout }}>
+      <Layout>
+        {isReady ? (
+          <Switch>
+            <Route path={ROUTES.AUTH.LOGIN}>
+              <Login login={setIsAuthenticated} />
+            </Route>
+            <PrivateRoute path={ROUTES.ROOT} component={Home} />
+          </Switch>
+        ) : (
+          <Loader />
+        )}
+      </Layout>
+    </AuthenticationContext.Provider>
+  );
+};
+
+export default App;

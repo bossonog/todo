@@ -1,182 +1,124 @@
-import { todos, FILTER_TYPE, EVENT_TYPE } from '../../constants';
-import { MainLayout } from '../../components/MainLayout';
-import { ToDoInput } from './components/ToDoInput';
-import { ToDoList } from './components/ToDoList';
-import { ToDoAllButton } from './components/ToDoAllButton';
-import { ToDoControls } from './components/ToDoControls';
-import { validateToDoInput } from '../../validation';
+import React, { useState, useEffect, memo } from 'react';
 
-export class Home {
-  constructor(elem, isAuthenticated) {
-    this.elem = elem;
-    this.filterState = FILTER_TYPE.ALL;
-    this.todos = todos;
-    this.isAuthenticated = isAuthenticated;
-  }
+import { ToDos } from './components';
 
-  render = () => {
-    this.elem.innerHTML = '';
+import { FILTER_TYPE } from '../../constants/filter';
 
-    const mainLayout = new MainLayout(this.elem, this.isAuthenticated());
+import { processValidationsArray, isEmpty, hasSymbols } from '../../util/validations';
 
-    mainLayout.render();
+const Home = () => {
+  const [todos, setToDos] = useState([
+    {
+      id: 3,
+      title: 'todo 3',
+      completed: true,
+    },
+  ]);
 
-    const app = document.getElementById('app');
+  const [isAllCompleted, setIsAllCompleted] = useState(false);
 
-    const toDoInput = new ToDoInput(app);
+  const [filterType, setFilterType] = useState(FILTER_TYPE.ALL);
 
-    const toDoList = new ToDoList(app);
+  const [toDoError, setToDoError] = useState('');
 
-    const toDoAllButton = new ToDoAllButton(app, this.todos);
+  useEffect(() => {
+    const checked = todos.every((todo) => todo.completed);
 
-    const toDoControls = new ToDoControls(app, this.todos);
+    setIsAllCompleted(checked);
+  }, [todos]);
 
-    const errorBox = document.createElement('div');
+  const removeToDo = (id) => {
+    setToDos(todos.filter((todo) => todo.id !== id));
+  };
 
-    errorBox.classList.add('app-error');
+  const changeToDo = (t) => {
+    setToDos(todos.map((todo) => (todo.id === t.id ? { ...todo, ...t } : todo)));
+  };
 
-    app.append(errorBox);
-
-    toDoInput.on(EVENT_TYPE.TODO_ADDED, (todo) => {
-      const errorMsg = validateToDoInput(todo.title);
-
-      if (errorMsg) {
-        return this.updateErrorMessage(errorMsg);
-      }
-
-      this.addToDo(todo);
-
-      toDoInput.clearInput();
-
-      const updatedTodos = this.getTodosByFilterState()
-
-      toDoAllButton.update(updatedTodos);
-      toDoList.render(updatedTodos);
-      toDoControls.render(updatedTodos);
-    });
-
-    toDoInput.on(EVENT_TYPE.INPUT_VALIDATION, (title) => {
-      const errorMsg = validateToDoInput(title);
-
-      this.updateErrorMessage(errorMsg);
-    });
-
-    toDoAllButton.on(EVENT_TYPE.TODO_TOGGLED, (checked) => {
-      this.setStatusCompleted(checked);
-
-      const updatedTodos = this.getTodosByFilterState()
-
-      toDoList.render(updatedTodos);
-      toDoControls.render(updatedTodos);
-    });
-
-    toDoList.on(EVENT_TYPE.TODO_EDITED, (todo) => {
-      const errorMsg = validateToDoInput(todo.title);
+  const addToDo = (e) => {
+    if (e.keyCode === 13) {
+      const title = e.target.value.trim();
+      const errorMsg = processValidationsArray([isEmpty, hasSymbols], title);
 
       if (errorMsg) {
-        return this.updateErrorMessage(errorMsg);
+        return setToDoError(errorMsg);
       }
 
-      this.updateErrorMessage(errorMsg);
+      const id = todos.length ? todos[todos.length - 1].id + 1 : 1;
 
-      const { id, completed, title } = todo;
+      e.target.value = '';
 
-      this.editToDoById(id, completed, title);
+      setToDos([...todos, { id, title, completed: false }]);
+    }
+  };
 
-      const updatedTodos = this.getTodosByFilterState()
+  const updateToDoInputError = (e) => {
+    const errorMsg = processValidationsArray([isEmpty, hasSymbols], e.target.value.trim());
 
-      toDoList.render(updatedTodos);
-      toDoAllButton.update(updatedTodos);
-      toDoControls.render(updatedTodos);
-    });
+    setToDoError(errorMsg);
+  };
 
-    toDoList.on(EVENT_TYPE.TODO_REMOVED, (id) => {
-      this.removeToDoById(id);
+  const toggleAllToDos = () => {
+    setToDos(todos.map((todo) => ({ ...todo, completed: !isAllCompleted })));
+  };
 
-      const updatedTodos = this.getTodosByFilterState()
+  const clearCompleted = () => {
+    setToDos(todos.filter((todo) => !todo.completed));
+  };
 
-      toDoList.render(updatedTodos);
-      toDoAllButton.update(updatedTodos);
-      toDoControls.render(updatedTodos);
-    });
+  const getActiveToDos = () => todos.filter((todo) => !todo.completed);
 
-    toDoControls.on(EVENT_TYPE.FILTER_APPLIED, (filterState) => {
-      this.filterState = filterState;
+  const getCompletedToDos = () => todos.filter((todo) => todo.completed);
 
-      toDoList.render(this.getTodosByFilterState());
-    });
+  const getToDosByFilterState = () => {
+    let filteredToDos = [];
 
-    toDoControls.on(EVENT_TYPE.CLEAR_COMPLETED, () => {
-      this.clearCompletedToDos();
-
-      const updatedTodos = this.getTodosByFilterState()
-
-      toDoAllButton.update(updatedTodos);
-      toDoList.render(updatedTodos);
-      toDoControls.render(updatedTodos);
-    });
-
-    toDoAllButton.render();
-    toDoInput.render();
-    toDoList.render(this.todos);
-    toDoControls.render(this.todos);
-  }
-
-  getActiveTodos = () => {
-    return this.todos.filter((todo) => !todo.completed);
-  }
-
-  getCompletedTodos = () => {
-    return this.todos.filter((todo) => todo.completed);
-  }
-
-  getTodosByFilterState = () => {
-    let filterState = this.filterState
-
-    if (filterState === FILTER_TYPE.ALL) {
-      return this.todos;
+    if (filterType === FILTER_TYPE.ALL) {
+      filteredToDos = todos;
     }
 
-    if (filterState === FILTER_TYPE.ACTIVE) {
-      return this.getActiveTodos();
+    if (filterType === FILTER_TYPE.ACTIVE) {
+      filteredToDos = getActiveToDos();
     }
 
-    if (filterState === FILTER_TYPE.COMPLETED) {
-      return this.getCompletedTodos();
+    if (filterType === FILTER_TYPE.COMPLETED) {
+      filteredToDos = getCompletedToDos();
     }
 
+    return filteredToDos;
+  };
+
+  const hasAtLeastOneCompleted = () => todos.find((todo) => todo.completed);
+
+  const getCompletedToDosLength = () => getActiveToDos().length;
+
+  const itemsLeft = getCompletedToDosLength();
+
+  let itemsLeftString = '';
+
+  if (itemsLeft === 0 || itemsLeft > 1) {
+    itemsLeftString = `${itemsLeft} items left`;
+  } else {
+    itemsLeftString = `${itemsLeft} item left`;
   }
 
-  editToDoById = (id, completed, title) => {
-    const todo = this.todos.find((todo) => todo.id === id);
+  return (
+    <ToDos
+      todos={getToDosByFilterState()}
+      removeToDo={removeToDo}
+      onKeyDown={addToDo}
+      onAllBtnClick={toggleAllToDos}
+      onClearBtnClick={clearCompleted}
+      hasAtLeastOneCompleted={hasAtLeastOneCompleted()}
+      setFilterType={setFilterType}
+      changeToDo={changeToDo}
+      itemsLeftString={itemsLeftString}
+      isAllCompleted={isAllCompleted}
+      filterType={filterType}
+      toDoError={toDoError}
+      onInput={updateToDoInputError}
+    />
+  );
+};
 
-    todo.completed = completed;
-    todo.title = title;
-  }
-
-  removeToDoById = (id) => {
-    this.todos = this.todos.filter((todo) => todo.id !== id);
-  }
-
-  setStatusCompleted = (checked) => {
-    this.todos.forEach((todo) => {
-      todo.completed = checked;
-    });
-  }
-
-  updateErrorMessage = (errorMsg) => {
-    const errorBox = document.querySelector('.app-error');
-
-    errorBox.textContent = errorMsg;
-  }
-
-  addToDo = (todo) => {
-    const id = this.todos.length ? this.todos[this.todos.length - 1].id + 1 : 0;
-
-    this.todos.push({ ...todo, id });
-  }
-
-  clearCompletedToDos = () => {
-    this.todos = this.todos.filter((todo) => !todo.completed);
-  }
-}
+export default memo(Home);

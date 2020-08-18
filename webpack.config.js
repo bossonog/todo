@@ -9,11 +9,14 @@ const path = require('path');
 module.exports = () => ({
   context: path.resolve(__dirname, 'src'),
   entry: {
-    index: './index.js'
+    index: './index.js',
   },
   output: {
     filename: '[name].[contenthash].bundle.js',
     path: path.resolve('build'),
+  },
+  devServer: {
+    port: 3000,
   },
   module: {
     rules: [
@@ -26,33 +29,40 @@ module.exports = () => ({
         use: [
           {
             loader: 'file-loader',
-            options: { outputPath: 'fonts', },
-          }
-        ]
+            options: { outputPath: 'fonts' },
+          },
+        ],
       },
       {
         test: /\.(jpg|png|svg|gif)$/,
-        use: [{
-          loader: 'file-loader',
-          options: { outputPath: 'images', },
-        }],
+        use: [
+          {
+            loader: 'file-loader',
+            options: { outputPath: 'images' },
+          },
+        ],
       },
       {
-        test: /\.js$/, exclude: /node_modules/, loader: {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', {
-              'plugins': ['@babel/plugin-proposal-class-properties']
-            }]
-          }
-        }
-      }
-    ]
+            presets: [
+              '@babel/preset-env',
+              {
+                plugins: ['@babel/plugin-proposal-class-properties'],
+              },
+            ],
+          },
+        },
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './index.html',
-      chunks: ["index"]
+      chunks: ['index'],
     }),
     new HtmlWebpackInjector(),
     new CleanWebpackPlugin(),
@@ -61,7 +71,7 @@ module.exports = () => ({
       chunkFilename: '[id].css',
     }),
   ],
-  devServer: {
-    open: true,
+  resolve: {
+    extensions: ['*', '.js', '.jsx'],
   },
 });

@@ -1,8 +1,8 @@
-import './styles/main.css';
-import './styles/input.css';
-import './styles/login.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import { App } from './App';
+import { BrowserRouter } from 'react-router-dom';
 
-const app = new App();
-app.render();
+import App from './App';
+
+ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));

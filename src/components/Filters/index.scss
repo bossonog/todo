@@ -1,0 +1,15 @@
+.todos-filters {
+
+}
+
+.todos-filter-btn {
+  &:last-child {
+    margin-right: 0px;
+  }
+
+  &.active {
+    font-weight: bold;
+  }
+
+  margin-right: 8px;
+}
