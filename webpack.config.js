@@ -1,12 +1,8 @@
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-
-const HtmlWebpackInjector = require('html-webpack-injector');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 const path = require('path');
 
-module.exports = () => ({
+module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
     index: './index.js',
@@ -15,63 +11,37 @@ module.exports = () => ({
     filename: '[name].[contenthash].bundle.js',
     path: path.resolve('build'),
   },
-  devServer: {
-    port: 3000,
-  },
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: { outputPath: 'fonts' },
-          },
-        ],
-      },
-      {
-        test: /\.(jpg|png|svg|gif)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: { outputPath: 'images' },
-          },
-        ],
-      },
-      {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loader: {
+        use: {
           loader: 'babel-loader',
-          options: {
-            presets: [
-              '@babel/preset-env',
-              {
-                plugins: ['@babel/plugin-proposal-class-properties'],
-              },
-            ],
-          },
         },
+      },
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'html-loader',
+          },
+        ],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({
+    new HtmlWebPackPlugin({
       template: './index.html',
-      chunks: ['index'],
-    }),
-    new HtmlWebpackInjector(),
-    new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css',
+      filename: './index.html',
     }),
   ],
-  resolve: {
-    extensions: ['*', '.js', '.jsx'],
+  devServer: {
+    port: 3000,
+    historyApiFallback: true,
   },
-});
+};
