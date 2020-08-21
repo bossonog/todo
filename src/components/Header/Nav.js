@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
-
+import React, { useContext, memo } from 'react';
 import { NavLink } from 'react-router-dom';
-import { AuthenticationContext } from '../../config';
+import { connect } from 'react-redux';
+import { Button } from '../';
+import { LOGOUT } from '../../app/authentication/actionTypes';
 
-const Nav = () => {
-  const { isAuthenticated, logout } = useContext(AuthenticationContext);
+const Nav = ({ isAuthenticated, logout }) => {
+  const onLogoutBtnClick = () => logout();
 
   return (
     <nav className="header-nav">
@@ -16,12 +17,20 @@ const Nav = () => {
         </li>
       </ul>
       {isAuthenticated && (
-        <button type="button" className="header-logout" onClick={logout}>
-          Logout
-        </button>
+        <Button type="button" className="header-logout" onClick={onLogoutBtnClick} title="Logout" />
       )}
     </nav>
   );
 };
 
-export default Nav;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.authentication.isAuthenticated,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  logout: () => dispatch({ type: LOGOUT.REQUEST }),
+});
+
+const NavContainer = connect(mapStateToProps, mapDispatchToProps)(Nav);
+
+export default memo(NavContainer);

@@ -1,10 +1,10 @@
 import React, { useState, memo } from 'react';
-
-import './index.scss';
+import { TODOS_FILTER_TYPE_OPTIONS } from '../../../../constants/filter';
 
 import ToDo from './ToDo';
 import Filters from '../../../../components/Filters';
-import { TODOS_FILTER_TYPE_OPTIONS } from '../../../../constants/filter';
+
+import './index.scss';
 
 const ToDos = ({
   todos,
@@ -12,12 +12,10 @@ const ToDos = ({
   removeToDo,
   changeToDo,
   onAllBtnClick,
-  setFilterType,
   itemsLeftString,
   isAllCompleted,
   onClearBtnClick,
   hasAtLeastOneCompleted,
-  filterType,
   toDoError,
   onInput,
 }) => {
@@ -28,8 +26,13 @@ const ToDos = ({
       <div className="todos-error">{toDoError}</div>
       <div className="todos-header">
         <span
-          className={`material-icons todos-checkall ${isAllCompleted ? 'checked' : ''}`}
-          onClick={() => { onAllBtnClick(); setEditingToDo(0); }}
+          className={`material-icons todos-checkall ${
+            isAllCompleted ? 'checked' : ''
+          }`}
+          onClick={() => {
+            onAllBtnClick();
+            setEditingToDo(0);
+          }}
         >
           check_box
         </span>
@@ -37,7 +40,10 @@ const ToDos = ({
           className="todos-new-todo input"
           type="text"
           placeholder="What needs to be done?"
-          onKeyDown={(e) => { onKeyDown(e); setEditingToDo(0); }}
+          onKeyDown={(e) => {
+            onKeyDown(e);
+            setEditingToDo(0);
+          }}
           onInput={onInput}
         />
       </div>
@@ -57,15 +63,16 @@ const ToDos = ({
       </ul>
       <div className="todos-controls">
         <span className="todos-counter">{itemsLeftString}</span>
-        <Filters
-          options={TODOS_FILTER_TYPE_OPTIONS}
-          setFilterType={setFilterType}
-          selectedType={filterType}
-        />
+        <Filters options={TODOS_FILTER_TYPE_OPTIONS} />
         <button
-          className={`todos-clear-btn button ${hasAtLeastOneCompleted ? '' : 'hidden'}`}
+          className={`todos-clear-btn button ${
+            hasAtLeastOneCompleted ? '' : 'hidden'
+          }`}
           type="button"
-          onClick={() => { onClearBtnClick(); setEditingToDo(0); }}
+          onClick={() => {
+            onClearBtnClick();
+            setEditingToDo(0);
+          }}
         >
           Clear completed
         </button>

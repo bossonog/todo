@@ -1,116 +1,89 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo, useCallback } from 'react';
 
 import { ToDos } from './components';
+import {
+  processValidationsArray,
+  isEmpty,
+  hasSymbols,
+} from '../../util/validations';
+import { connect } from 'react-redux';
+import {
+  CHANGE_TODO,
+  TOGGLE_ALL_TODOS_STATUS,
+  CLEAR_ALL_COMPLETED,
+  ADD_TODO,
+  REMOVE_TODO,
+  SET_TODO_VALIDATION_ERROR,
+} from '../../app/todos/actionTypes';
+import {
+  isAllToDosCompleted,
+  hasAtLeastOneCompleted,
+  getActivesToDosString,
+} from '../../app/todos/selectors';
 
-import { FILTER_TYPE } from '../../constants/filter';
-
-import { processValidationsArray, isEmpty, hasSymbols } from '../../util/validations';
-
-const Home = () => {
-  const [todos, setToDos] = useState([
-    {
-      id: 3,
-      title: 'todo 3',
-      completed: true,
-    },
-  ]);
-
-  const [isAllCompleted, setIsAllCompleted] = useState(false);
-
-  const [filterType, setFilterType] = useState(FILTER_TYPE.ALL);
-
-  const [toDoError, setToDoError] = useState('');
-
-  useEffect(() => {
-    const checked = todos.every((todo) => todo.completed);
-
-    setIsAllCompleted(checked);
-  }, [todos]);
-
-  const removeToDo = (id) => {
-    setToDos(todos.filter((todo) => todo.id !== id));
-  };
-
-  const changeToDo = (t) => {
-    setToDos(todos.map((todo) => (todo.id === t.id ? { ...todo, ...t } : todo)));
-  };
-
-  const addToDo = (e) => {
+const Home = ({
+  filterType,
+  todos,
+  isAllCompleted,
+  hasAtLeastOneCompleted,
+  changeToDo,
+  toggleAllToDos,
+  clearCompleted,
+  addToDo,
+  removeToDo,
+  toDoError,
+  setToDoError,
+  itemsLeftString,
+}) => {
+  const handleAddToDo = useCallback((e) => {
     if (e.keyCode === 13) {
-      const title = e.target.value.trim();
-      const errorMsg = processValidationsArray([isEmpty, hasSymbols], title);
+      const title = e.target.value;
 
-      if (errorMsg) {
-        return setToDoError(errorMsg);
-      }
-
-      const id = todos.length ? todos[todos.length - 1].id + 1 : 1;
+      addToDo({ title });
 
       e.target.value = '';
-
-      setToDos([...todos, { id, title, completed: false }]);
     }
-  };
+  });
 
-  const updateToDoInputError = (e) => {
-    const errorMsg = processValidationsArray([isEmpty, hasSymbols], e.target.value.trim());
+  const updateToDoInputError = useCallback((e) => {
+    const errorMsg = processValidationsArray(
+      [isEmpty, hasSymbols],
+      e.target.value.trim()
+    );
 
-    setToDoError(errorMsg);
-  };
-
-  const toggleAllToDos = () => {
-    setToDos(todos.map((todo) => ({ ...todo, completed: !isAllCompleted })));
-  };
-
-  const clearCompleted = () => {
-    setToDos(todos.filter((todo) => !todo.completed));
-  };
-
-  const getActiveToDos = () => todos.filter((todo) => !todo.completed);
-
-  const getCompletedToDos = () => todos.filter((todo) => todo.completed);
-
-  const getToDosByFilterState = () => {
-    let filteredToDos = [];
-
-    if (filterType === FILTER_TYPE.ALL) {
-      filteredToDos = todos;
+    if (errorMsg) {
+      return setToDoError(errorMsg);
     }
 
-    if (filterType === FILTER_TYPE.ACTIVE) {
-      filteredToDos = getActiveToDos();
-    }
+    setToDoError('');
+  });
 
-    if (filterType === FILTER_TYPE.COMPLETED) {
-      filteredToDos = getCompletedToDos();
-    }
+  // const getToDosByFilterState = () => {
+  //   let filteredToDos = [];
 
-    return filteredToDos;
-  };
+  //   if (filterType === FILTER_TYPE.ALL) {
+  //     filteredToDos = todos;
+  //   }
 
-  const hasAtLeastOneCompleted = () => todos.find((todo) => todo.completed);
+  //   if (filterType === FILTER_TYPE.ACTIVE) {
+  //     filteredToDos = activeToDos;
+  //   }
 
-  const getCompletedToDosLength = () => getActiveToDos().length;
+  //   if (filterType === FILTER_TYPE.COMPLETED) {
+  //     filteredToDos = completedToDos;
+  //   }
 
-  const itemsLeft = getCompletedToDosLength();
-
-  let itemsLeftString = '';
-
-  if (itemsLeft === 0 || itemsLeft > 1) {
-    itemsLeftString = `${itemsLeft} items left`;
-  } else {
-    itemsLeftString = `${itemsLeft} item left`;
-  }
+  //   return filteredToDos;
+  // };
 
   return (
     <ToDos
-      todos={getToDosByFilterState()}
+      todos={todos}
       removeToDo={removeToDo}
-      onKeyDown={addToDo}
+      onKeyDown={handleAddToDo}
       onAllBtnClick={toggleAllToDos}
       onClearBtnClick={clearCompleted}
-      hasAtLeastOneCompleted={hasAtLeastOneCompleted()}
-      setFilterType={setFilterType}
+      hasAtLeastOneCompleted={hasAtLeastOneCompleted}
       changeToDo={changeToDo}
       itemsLeftString={itemsLeftString}
       isAllCompleted={isAllCompleted}
@@ -121,4 +94,26 @@ const Home = () => {
   );
 };
 
-export default memo(Home);
+const mapStateToProps = (state) => ({
+  todos: state.todos.todos,
+  isAuthenticated: state.authentication.isAuthenticated,
+  isAllCompleted: isAllToDosCompleted(state),
+  hasAtLeastOneCompleted: hasAtLeastOneCompleted(state),
+  toDoError: state.todos.error,
+  itemsLeftString: getActivesToDosString(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  changeToDo: (todo) =>
+    dispatch({ type: CHANGE_TODO.REQUEST, payload: { todo } }),
+  toggleAllToDos: () => dispatch({ type: TOGGLE_ALL_TODOS_STATUS.REQUEST }),
+  clearCompleted: () => dispatch({ type: CLEAR_ALL_COMPLETED.REQUEST }),
+  addToDo: (todo) => dispatch({ type: ADD_TODO.REQUEST, payload: { todo } }),
+  removeToDo: (id) => dispatch({ type: REMOVE_TODO.REQUEST, payload: { id } }),
+  setToDoError: (error) =>
+    dispatch({ type: SET_TODO_VALIDATION_ERROR.REQUEST, payload: { error } }),
+});
+
+const HomeContainer = connect(mapStateToProps, mapDispatchToProps)(Home);
+
+export default memo(HomeContainer);

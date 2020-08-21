@@ -1,14 +1,12 @@
-import React, { memo, useState, useEffect } from 'react';
-
+import React, { memo, useState, useEffect, useCallback } from 'react';
 import { Input, Button, ErrorBox } from '../../../components';
-
-import { isEmpty, processValidationsArray } from '../../../util/validations';
-
-import { CREDENTIALS } from '../../../constants/user';
+import { processValidationsArray } from '../../../util/validations';
+import { LOGIN } from '../../../app/authentication/actionTypes';
 
 import './LoginForm.scss';
+import { connect } from 'react-redux';
 
-const LoginForm = ({ login, options }) => {
+const LoginForm = ({ options, login, formError }) => {
   const [formData, setFormData] = useState({
     username: {
       value: '',
@@ -20,9 +18,7 @@ const LoginForm = ({ login, options }) => {
     },
   });
 
-  const [formError, setFormError] = useState('');
-
-  const onFormSubmit = (e) => {
+  const onFormSubmit = useCallback((e) => {
     e.preventDefault();
 
     const _formData = JSON.parse(JSON.stringify(formData));
@@ -47,27 +43,26 @@ const LoginForm = ({ login, options }) => {
       return;
     }
 
-    if (
-      CREDENTIALS.username === formData.username.value &&
-      CREDENTIALS.password === formData.password.value
-    ) {
-      localStorage.setItem('auth', true);
+    const credentials = {
+      username: formData.username.value,
+      password: formData.password.value,
+    };
 
-      return login(true);
-    }
+    login(credentials);
+  });
 
-    setFormError('There is no user with provided credentials');
-  };
-
-  const onInput = (e) => {
+  const onInput = useCallback((e) => {
     const field = {
       ...formData[e.target.name],
       value: e.target.value,
       error: '',
     };
 
-    setFormData({ ...formData, [e.target.name]: field });
-  };
+    setFormData({
+      ...formData,
+      [e.target.name]: field,
+    });
+  });
 
   return (
     <form className="login" onSubmit={onFormSubmit}>
@@ -102,4 +97,18 @@ const LoginForm = ({ login, options }) => {
   );
 };
 
-export default memo(LoginForm);
+const mapStateToProps = (state) => ({
+  formError: state.authentication.error,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  login: (credentials) =>
+    dispatch({ type: LOGIN.REQUEST, payload: { credentials } }),
+});
+
+const LoginFormContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginForm);
+
+export default memo(LoginFormContainer);

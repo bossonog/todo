@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, memo, useState } from 'react';
+import React, { useRef, useEffect, memo, useState, useCallback } from 'react';
 
 import { processValidationsArray } from '../../util/validations';
 
@@ -26,9 +26,11 @@ const Input = ({
     }
   }, [isFocused]);
 
-  const validate = (val) => processValidationsArray(validationFunctions, val);
+  const validate = useCallback((val) =>
+    processValidationsArray(validationFunctions, val)
+  );
 
-  const handleSubmit = (e) => {
+  const handleSubmit = useCallback((e) => {
     if (e.keyCode === 13) {
       const str = e.target.value.trim();
       const errorMsg = validate(str);
@@ -41,9 +43,9 @@ const Input = ({
 
       setError(errorMsg);
     }
-  };
+  });
 
-  const handleInput = (e) => {
+  const handleInput = useCallback((e) => {
     const str = e.target.value.trim();
     const errorMsg = validate(str);
 
@@ -54,7 +56,7 @@ const Input = ({
     }
 
     setError(errorMsg);
-  };
+  });
 
   return (
     <div className={className}>

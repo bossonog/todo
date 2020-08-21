@@ -1,49 +1,48 @@
-import React, { useState, useEffect } from 'react';
-
-import './styles/main.scss';
-
+import React, { useEffect, memo } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Layout, PrivateRoute, Loader } from './components';
 import { Home, Login } from './pages';
-import { AuthenticationContext } from './config';
+import { connect } from 'react-redux';
+import { INIT } from './app/main/actionTypes';
 
 import ROUTES from './routes';
 
-const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isReady, setIsReady] = useState(false);
+import './styles/main.scss';
 
+const App = ({ isAuthenticated, isAppReady, appInit }) => {
   useEffect(() => {
-    if (localStorage.getItem('auth')) {
-      setIsAuthenticated(true);
-    }
-
-    setTimeout(() => {
-      setIsReady(true);
-    }, 1500);
-  }, [isReady, isAuthenticated]);
-
-  const logout = () => {
-    localStorage.removeItem('auth');
-    setIsAuthenticated(false);
-  };
+    appInit();
+  }, []);
 
   return (
-    <AuthenticationContext.Provider value={{ isAuthenticated, logout }}>
-      <Layout>
-        {isReady ? (
-          <Switch>
-            <Route path={ROUTES.AUTH.LOGIN}>
-              <Login login={setIsAuthenticated} />
-            </Route>
-            <PrivateRoute path={ROUTES.ROOT} component={Home} />
-          </Switch>
-        ) : (
-          <Loader />
-        )}
-      </Layout>
-    </AuthenticationContext.Provider>
+    <Layout>
+      {isAppReady ? (
+        <Switch>
+          <Route path={ROUTES.AUTH.LOGIN}>
+            <Login />
+          </Route>
+          <PrivateRoute
+            path={ROUTES.ROOT}
+            component={Home}
+            isAuthenticated={isAuthenticated}
+          />
+        </Switch>
+      ) : (
+        <Loader />
+      )}
+    </Layout>
   );
 };
 
-export default App;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.authentication.isAuthenticated,
+  isAppReady: state.main.isAppReady,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  appInit: () => dispatch({ type: INIT.REQUEST }),
+});
+
+const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);
+
+export default memo(AppContainer);
