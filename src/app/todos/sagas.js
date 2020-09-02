@@ -1,11 +1,4 @@
-import {
-  call,
-  put,
-  debounce,
-  takeEvery,
-  takeLatest,
-  select,
-} from 'redux-saga/effects';
+import { put, takeLatest, select } from 'redux-saga/effects';
 import {
   TOGGLE_ALL_TODOS_STATUS,
   CHANGE_TODO,
@@ -22,15 +15,16 @@ import {
   hasSymbols,
 } from '../../util/validations';
 import { FILTER_TYPE } from '../../constants/filter';
+import { TODOS } from '../../constants/todos';
 
 function* toggleAllToDos() {
-  const completed = yield select(isAllToDosCompleted);
+  const isCompleted = yield select(isAllToDosCompleted);
   const todos = yield select(getToDos);
 
   yield put({
     type: TOGGLE_ALL_TODOS_STATUS.SUCCESS,
     payload: {
-      todos: todos.map((t) => ({ ...t, completed: !completed })),
+      todos: todos.map((t) => ({ ...t, completed: !isCompleted })),
     },
   });
 }
@@ -105,29 +99,27 @@ function* setValidationError(action) {
 function* setFilterType(action) {
   const { filterType } = action.payload;
 
-  // const todos = yield select(getToDos);
+  let filteredToDos = [];
 
-  // let filteredToDos = [];
+  if (filterType === FILTER_TYPE.ALL) {
+    filteredToDos = TODOS;
+  }
 
-  // if (filterType === FILTER_TYPE.ALL) {
-  //   filteredToDos = todos;
-  // }
+  if (filterType === FILTER_TYPE.ACTIVE) {
+    filteredToDos = TODOS.filter((todo) => {
+      return !todo.completed;
+    });
+  }
 
-  // if (filterType === FILTER_TYPE.ACTIVE) {
-  //   filteredToDos = todos.filter((todo) => {
-  //     return !todo.completed;
-  //   });
-  // }
-
-  // if (filterType === FILTER_TYPE.COMPLETED) {
-  //   filteredToDos = todos.filter((todo) => {
-  //     return todo.completed;
-  //   });
-  // }
+  if (filterType === FILTER_TYPE.COMPLETED) {
+    filteredToDos = TODOS.filter((todo) => {
+      return todo.completed;
+    });
+  }
 
   yield put({
     type: SET_FILTER_TYPE.SUCCESS,
-    payload: { filterType },
+    payload: { filterType, todos: filteredToDos },
   });
 }
 

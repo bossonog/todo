@@ -5,23 +5,19 @@ import { createSelector } from 'reselect';
 // export const getCompletedToDosLength = (state) => getActiveToDos(state).length;
 
 export const isAllToDosCompleted = (state) =>
-  state.todos.todos.every((todo) => todo.completed);
+  state.todos.list.every((todo) => todo.completed);
 
-export const getToDos = (state) => state.todos.todos;
+export const getToDos = (state) => state.todos.list;
 
 export const hasAtLeastOneCompleted = (state) =>
-  state.todos.todos.find((todo) => todo.completed);
+  state.todos.list.some((todo) => todo.completed);
 
 export const getActivesToDosString = createSelector([getToDos], (todos) => {
   const itemsLeft = todos.filter((todo) => !todo.completed).length;
 
-  let itemsLeftString = '';
-
   if (itemsLeft === 0 || itemsLeft > 1) {
-    itemsLeftString = `${itemsLeft} items left`;
-  } else {
-    itemsLeftString = `${itemsLeft} item left`;
+    return `${itemsLeft} items left`;
   }
 
-  return itemsLeftString;
+  return `${itemsLeft} item left`;
 });

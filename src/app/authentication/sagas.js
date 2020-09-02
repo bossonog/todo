@@ -1,16 +1,13 @@
 import { call, put, takeEvery, takeLatest, take } from 'redux-saga/effects';
 import { LOGIN, LOGOUT, SET_TOKEN } from './actionTypes';
-import { CREDENTIALS } from '../../constants/user';
 import { TOKEN_NAME } from '../../constants/login';
 
 function* login(action) {
   const { username, password } = action.payload.credentials;
 
-  if (CREDENTIALS.username === username && CREDENTIALS.password === password) {
+  if (username === 'test' && password === 'test') {
     yield setToken(true);
-    yield put({ type: LOGIN.SUCCESS });
-
-    return;
+    return yield put({ type: LOGIN.SUCCESS });
   }
 
   yield put({

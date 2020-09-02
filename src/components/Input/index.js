@@ -26,37 +26,44 @@ const Input = ({
     }
   }, [isFocused]);
 
-  const validate = useCallback((val) =>
-    processValidationsArray(validationFunctions, val)
+  const validate = useCallback(
+    (val) => processValidationsArray(validationFunctions, val),
+    [validationFunctions]
   );
 
-  const handleSubmit = useCallback((e) => {
-    if (e.keyCode === 13) {
+  const handleSubmit = useCallback(
+    (e) => {
+      if (e.keyCode === 13) {
+        const str = e.target.value.trim();
+        const errorMsg = validate(str);
+
+        if (!errorMsg) {
+          setError('');
+
+          return onSubmit(e);
+        }
+
+        setError(errorMsg);
+      }
+    },
+    [onSubmit, validate]
+  );
+
+  const handleInput = useCallback(
+    (e) => {
       const str = e.target.value.trim();
       const errorMsg = validate(str);
 
       if (!errorMsg) {
         setError('');
 
-        return onSubmit(e);
+        return onInput(e);
       }
 
       setError(errorMsg);
-    }
-  });
-
-  const handleInput = useCallback((e) => {
-    const str = e.target.value.trim();
-    const errorMsg = validate(str);
-
-    if (!errorMsg) {
-      setError('');
-
-      return onInput(e);
-    }
-
-    setError(errorMsg);
-  });
+    },
+    [setError, onInput, validate]
+  );
 
   return (
     <div className={className}>

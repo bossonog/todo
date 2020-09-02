@@ -4,9 +4,5 @@ import mainSagas from '../app/main/sagas';
 import { all } from 'redux-saga/effects';
 
 export default function* () {
-  yield all([
-    ...authenticationSagas,
-    ...todosSagas,
-    ...mainSagas,
-  ]);
+  yield all([...authenticationSagas, ...todosSagas, ...mainSagas]);
 }

@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import './index.scss';
 
 const Login = ({ isAuthenticated }) => {
+  // TODO create shared HOC for this
   return isAuthenticated ? (
     <Redirect to={ROUTES.ROOT} />
   ) : (
@@ -20,8 +21,6 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.authentication.isAuthenticated,
 });
 
-const mapDispatchToProps = (dispatch) => ({});
-
-const LoginContainer = connect(mapStateToProps, mapDispatchToProps)(Login);
+const LoginContainer = connect(mapStateToProps, null)(Login);
 
 export default memo(LoginContainer);

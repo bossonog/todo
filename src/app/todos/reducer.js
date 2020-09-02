@@ -8,20 +8,10 @@ import {
   SET_FILTER_TYPE,
 } from './actionTypes';
 import { FILTER_TYPE } from '../../constants/filter';
+import { TODOS } from '../../constants/todos';
 
 const initialState = {
-  todos: [
-    {
-      id: 2,
-      title: 'todo 2',
-      completed: false,
-    },
-    {
-      id: 3,
-      title: 'todo 3',
-      completed: true,
-    },
-  ],
+  list: TODOS,
   error: '',
   filterType: FILTER_TYPE.ALL,
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo, useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 
 import { ToDos } from './components';
 import {
@@ -35,46 +35,34 @@ const Home = ({
   setToDoError,
   itemsLeftString,
 }) => {
-  const handleAddToDo = useCallback((e) => {
-    if (e.keyCode === 13) {
-      const title = e.target.value;
+  const handleAddToDo = useCallback(
+    (e) => {
+      if (e.keyCode === 13) {
+        const title = e.target.value;
 
-      addToDo({ title });
+        addToDo({ title });
 
-      e.target.value = '';
-    }
-  });
+        e.target.value = '';
+      }
+    },
+    [addToDo]
+  );
 
-  const updateToDoInputError = useCallback((e) => {
-    const errorMsg = processValidationsArray(
-      [isEmpty, hasSymbols],
-      e.target.value.trim()
-    );
+  const updateToDoInputError = useCallback(
+    (e) => {
+      const errorMsg = processValidationsArray(
+        [isEmpty, hasSymbols],
+        e.target.value.trim()
+      );
 
-    if (errorMsg) {
-      return setToDoError(errorMsg);
-    }
+      if (errorMsg) {
+        return setToDoError(errorMsg);
+      }
 
-    setToDoError('');
-  });
-
-  // const getToDosByFilterState = () => {
-  //   let filteredToDos = [];
-
-  //   if (filterType === FILTER_TYPE.ALL) {
-  //     filteredToDos = todos;
-  //   }
-
-  //   if (filterType === FILTER_TYPE.ACTIVE) {
-  //     filteredToDos = activeToDos;
-  //   }
-
-  //   if (filterType === FILTER_TYPE.COMPLETED) {
-  //     filteredToDos = completedToDos;
-  //   }
-
-  //   return filteredToDos;
-  // };
+      setToDoError('');
+    },
+    [setToDoError]
+  );
 
   return (
     <ToDos
@@ -95,7 +83,7 @@ const Home = ({
 };
 
 const mapStateToProps = (state) => ({
-  todos: state.todos.todos,
+  todos: state.todos.list,
   isAuthenticated: state.authentication.isAuthenticated,
   isAllCompleted: isAllToDosCompleted(state),
   hasAtLeastOneCompleted: hasAtLeastOneCompleted(state),
