@@ -1,10 +1,6 @@
 export const isEmpty = (value) => (value ? '' : 'The string must not be empty');
 
 export const hasSymbols = (value) => {
-  // if (!/^\w+( \w+)*$/.test(str)) {
-  //   return 'The string must not contain symbols';
-  // }
-
   if (!/^[A-Za-z0-9,!'";:-\s.?]+$/.test(value)) {
     return 'The string must contain only these symbols: ,.;:-\'"?!';
   }

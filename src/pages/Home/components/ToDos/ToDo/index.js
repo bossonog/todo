@@ -1,10 +1,8 @@
 import React, { memo } from 'react';
+import { Input } from '../../../../../components';
+import { isEmpty, hasSymbols } from '../../../../../util/validations';
 
 import './index.scss';
-
-import { Input } from '../../../../../components';
-
-import { isEmpty, hasSymbols } from '../../../../../util/validations';
 
 const ToDo = ({
   todo,
@@ -18,7 +16,9 @@ const ToDo = ({
   <li className={`todo ${todo.completed ? 'completed' : ''}`}>
     <span
       className={`todo-checkbox material-icons ${isEditing ? 'hidden' : ''}`}
-      onClick={() => handleCheckboxClick({ ...todo, completed: !todo.completed })}
+      onClick={() =>
+        handleCheckboxClick({ ...todo, completed: !todo.completed })
+      }
     >
       {todo.completed ? 'check_box' : 'check_box_outline_blank'}
     </span>

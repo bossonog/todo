@@ -23,3 +23,5 @@ export const LOGIN_INPUTS_OPTIONS = {
     validationFunctions: [isEmpty],
   },
 };
+
+export const TOKEN_NAME = 'token';
