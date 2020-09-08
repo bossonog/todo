@@ -9,7 +9,9 @@ module.exports = {
   },
   output: {
     filename: '[name].[contenthash].bundle.js',
-    path: path.resolve('build'),
+    // chunkFilename: '[name].[contenthash].bundle.js',
+    // path: path.resolve('build'),
+    // publicPath: 'build/',
   },
   module: {
     rules: [
@@ -32,12 +34,17 @@ module.exports = {
         test: /\.s[ac]ss$/i,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
+      {
+        test: /\.(png|svg|jpg|gif|ico)$/,
+        use: ['file-loader'],
+      },
     ],
   },
   plugins: [
     new HtmlWebPackPlugin({
       template: './index.html',
       filename: './index.html',
+      favicon: './images/favicon.ico',
     }),
   ],
   devServer: {

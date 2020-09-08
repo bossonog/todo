@@ -24,4 +24,7 @@ export const LOGIN_INPUTS_OPTIONS = {
   },
 };
 
-export const TOKEN_NAME = 'token';
+export const TOKEN_FIELDS_NAMES = {
+  REFRESH_TOKEN: 'refreshToken',
+  ACCESS_TOKEN: 'accessToken',
+};

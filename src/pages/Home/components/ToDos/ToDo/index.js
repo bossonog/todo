@@ -3,6 +3,7 @@ import { Input } from '../../../../../components';
 import { isEmpty, hasSymbols } from '../../../../../util/validations';
 
 import './index.scss';
+import { TODO_STATUS } from '../../../../../constants/todos';
 
 const ToDo = ({
   todo,
@@ -13,14 +14,26 @@ const ToDo = ({
   onInput,
   onSubmit,
 }) => (
-  <li className={`todo ${todo.completed ? 'completed' : ''}`}>
+  <li
+    className={`todo ${
+      todo.status === TODO_STATUS.COMPLETED ? 'completed' : ''
+    }`}
+  >
     <span
       className={`todo-checkbox material-icons ${isEditing ? 'hidden' : ''}`}
       onClick={() =>
-        handleCheckboxClick({ ...todo, completed: !todo.completed })
+        handleCheckboxClick({
+          ...todo,
+          status:
+            todo.status === TODO_STATUS.COMPLETED
+              ? TODO_STATUS.UNCOMPLETED
+              : TODO_STATUS.COMPLETED,
+        })
       }
     >
-      {todo.completed ? 'check_box' : 'check_box_outline_blank'}
+      {todo.status === TODO_STATUS.COMPLETED
+        ? 'check_box'
+        : 'check_box_outline_blank'}
     </span>
     <div className="todo-edit-box" onDoubleClick={() => onDblClick(todo.id)}>
       {isEditing ? (

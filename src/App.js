@@ -5,7 +5,7 @@ import { Home, Login } from './pages';
 import { connect } from 'react-redux';
 import { INIT } from './app/main/actionTypes';
 
-import ROUTES from './routes';
+import { APP_ROUTES } from './routes';
 
 import './styles/main.scss';
 
@@ -18,11 +18,11 @@ const App = ({ isAuthenticated, isAppReady, appInit }) => {
     <Layout>
       {isAppReady ? (
         <Switch>
-          <Route path={ROUTES.AUTH.LOGIN}>
+          <Route path={APP_ROUTES.AUTH.LOGIN}>
             <Login />
           </Route>
           <PrivateRoute
-            path={ROUTES.ROOT}
+            path={APP_ROUTES.ROOT}
             component={Home}
             isAuthenticated={isAuthenticated}
           />

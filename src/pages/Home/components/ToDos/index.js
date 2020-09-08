@@ -1,10 +1,10 @@
 import React, { useState, memo } from 'react';
 import { TODOS_FILTER_TYPE_OPTIONS } from '../../../../constants/filter';
-
 import ToDo from './ToDo';
 import Filters from '../../../../components/Filters';
 
 import './index.scss';
+import { Button } from '../../../../components';
 
 const ToDos = ({
   todos,
@@ -18,6 +18,9 @@ const ToDos = ({
   hasAtLeastOneCompleted,
   toDoError,
   onInput,
+  loadMoreTodos,
+  totalPages,
+  currentPage,
 }) => {
   const [editingToDo, setEditingToDo] = useState(0);
 
@@ -34,7 +37,7 @@ const ToDos = ({
             setEditingToDo(0);
           }}
         >
-          check_box
+          {isAllCompleted ? 'indeterminate_check_box' : 'check_box'}
         </span>
         <input
           className="todos-new-todo input"
@@ -61,6 +64,15 @@ const ToDos = ({
           />
         ))}
       </ul>
+      {currentPage < totalPages && (
+        <div className="todos-loader">
+          <Button
+            title="Load more..."
+            className="todos-loader-btn button"
+            onClick={() => loadMoreTodos({ page: currentPage + 1 })}
+          />
+        </div>
+      )}
       <div className="todos-controls">
         <span className="todos-counter">{itemsLeftString}</span>
         <Filters options={TODOS_FILTER_TYPE_OPTIONS} />
