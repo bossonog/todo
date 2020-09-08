@@ -55,8 +55,7 @@ export default class HttpService {
 
     if (
       response.status === 401 &&
-      response.url !== SERVER_ROUTES.AUTH.REFRESH_TOKEN &&
-      true
+      response.url !== SERVER_ROUTES.AUTH.REFRESH_TOKEN
     ) {
       if (!this.isRefreshed) {
         this.refreshing = new Promise((res, rej) => {
