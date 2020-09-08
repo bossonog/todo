@@ -1,11 +1,12 @@
-import React, { useEffect, memo } from 'react';
+import React, { useEffect, memo, lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Layout, PrivateRoute, Loader } from './components';
-import { Home, Login } from './pages';
 import { connect } from 'react-redux';
 import { INIT } from './app/main/actionTypes';
-
 import { APP_ROUTES } from './routes';
+
+const Home = lazy(() => import('./pages/Home'));
+const Login = lazy(() => import('./pages/Login'));
 
 import './styles/main.scss';
 
@@ -17,16 +18,18 @@ const App = ({ isAuthenticated, isAppReady, appInit }) => {
   return (
     <Layout>
       {isAppReady ? (
-        <Switch>
-          <Route path={APP_ROUTES.AUTH.LOGIN}>
-            <Login />
-          </Route>
-          <PrivateRoute
-            path={APP_ROUTES.ROOT}
-            component={Home}
-            isAuthenticated={isAuthenticated}
-          />
-        </Switch>
+        <Suspense fallback={<Loader />}>
+          <Switch>
+            <Route path={APP_ROUTES.AUTH.LOGIN}>
+              <Login />
+            </Route>
+            <PrivateRoute
+              path={APP_ROUTES.ROOT}
+              component={Home}
+              isAuthenticated={isAuthenticated}
+            />
+          </Switch>
+        </Suspense>
       ) : (
         <Loader />
       )}

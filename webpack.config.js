@@ -9,9 +9,8 @@ module.exports = {
   },
   output: {
     filename: '[name].[contenthash].bundle.js',
-    // chunkFilename: '[name].[contenthash].bundle.js',
-    // path: path.resolve('build'),
-    // publicPath: 'build/',
+    path: path.resolve(__dirname, 'build'),
+    chunkFilename: '[name].[contenthash].bundle.js',
   },
   module: {
     rules: [
