@@ -93,7 +93,7 @@ export default class HttpService {
 
     if (response.status === 400) {
       console.log('-------');
-      console.log(response + '.');
+      console.log(response + '...');
       console.log('-------');
     }
 
