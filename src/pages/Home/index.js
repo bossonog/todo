@@ -1,5 +1,4 @@
-import React, { memo, useCallback } from 'react';
-
+import React, { memo, useCallback, useEffect } from 'react';
 import { ToDos } from './components';
 import {
   processValidationsArray,
@@ -14,6 +13,7 @@ import {
   ADD_TODO,
   REMOVE_TODO,
   SET_TODO_VALIDATION_ERROR,
+  FETCH_ALL_TODOS,
 } from '../../app/todos/actionTypes';
 import {
   isAllToDosCompleted,
@@ -34,7 +34,14 @@ const Home = ({
   toDoError,
   setToDoError,
   itemsLeftString,
+  getAllToDos,
+  totalPages,
+  currentPage,
 }) => {
+  useEffect(() => {
+    getAllToDos({ page: 1 });
+  }, []);
+
   const handleAddToDo = useCallback(
     (e) => {
       if (e.keyCode === 13) {
@@ -78,6 +85,9 @@ const Home = ({
       filterType={filterType}
       toDoError={toDoError}
       onInput={updateToDoInputError}
+      loadMoreTodos={getAllToDos}
+      totalPages={totalPages}
+      currentPage={currentPage}
     />
   );
 };
@@ -89,6 +99,8 @@ const mapStateToProps = (state) => ({
   hasAtLeastOneCompleted: hasAtLeastOneCompleted(state),
   toDoError: state.todos.error,
   itemsLeftString: getActivesToDosString(state),
+  totalPages: state.todos.totalPages,
+  currentPage: state.todos.page,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -100,6 +112,9 @@ const mapDispatchToProps = (dispatch) => ({
   removeToDo: (id) => dispatch({ type: REMOVE_TODO.REQUEST, payload: { id } }),
   setToDoError: (error) =>
     dispatch({ type: SET_TODO_VALIDATION_ERROR.REQUEST, payload: { error } }),
+  getAllToDos: ({ page }) => {
+    dispatch({ type: FETCH_ALL_TODOS.REQUEST, payload: { page } });
+  },
 });
 
 const HomeContainer = connect(mapStateToProps, mapDispatchToProps)(Home);

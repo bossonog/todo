@@ -1,15 +1,24 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest, delay } from 'redux-saga/effects';
 import { INIT } from './actionTypes';
-import { TOKEN_NAME } from '../../constants/login';
-import { SET_TOKEN } from '../authentication/actionTypes';
+import { TOKEN_FIELDS_NAMES } from '../../constants/login';
+import { SET_TOKENS } from '../authentication/actionTypes';
+import LocalStorage from '../../util/localStorage';
 
 function* init() {
-  const token = localStorage.getItem(TOKEN_NAME);
+  try {
+    const tokens = LocalStorage.getItems(TOKEN_FIELDS_NAMES);
 
-  if (token) {
-    yield put({ type: SET_TOKEN.REQUEST, payload: { token } });
+    yield put({
+      type: SET_TOKENS.REQUEST,
+      payload: { tokens },
+    });
+  } catch (error) {
+    yield put({
+      type: SET_TOKENS.FAIL,
+    });
   }
 
+  yield delay(1000);
   yield put({ type: INIT.SUCCESS });
 }
 

@@ -1,13 +1,13 @@
 import React, { memo } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-import ROUTES from '../routes';
+import { APP_ROUTES } from '../routes';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
   return isAuthenticated ? (
     <Route {...rest} component={Component} />
   ) : (
-    <Redirect to={ROUTES.AUTH.LOGIN} />
+    <Redirect to={APP_ROUTES.AUTH.LOGIN} />
   );
 };
 

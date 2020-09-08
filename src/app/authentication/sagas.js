@@ -1,35 +1,63 @@
-import { call, put, takeEvery, takeLatest, take } from 'redux-saga/effects';
-import { LOGIN, LOGOUT, SET_TOKEN } from './actionTypes';
-import { TOKEN_NAME } from '../../constants/login';
+import { put, takeLatest, call, debounce } from 'redux-saga/effects';
+import { LOGIN, LOGOUT, SET_TOKENS } from './actionTypes';
+import { TOKEN_FIELDS_NAMES } from '../../constants/login';
+import HttpService from '../../services/HttpService';
+import { SERVER_ROUTES } from '../../routes';
+import LocalStorage from '../../util/localStorage';
 
 function* login(action) {
   const { username, password } = action.payload.credentials;
 
-  if (username === 'test' && password === 'test') {
-    yield setToken(true);
-    return yield put({ type: LOGIN.SUCCESS });
-  }
+  try {
+    const response = yield call(HttpService.post, SERVER_ROUTES.AUTH.LOGIN, {
+      username,
+      password,
+    });
 
-  yield put({
-    type: LOGIN.FAIL,
-    payload: { error: 'There is no user with provided credentials' },
-  });
+    const { refreshToken, accessToken } = response;
+
+    yield setTokens({ payload: { tokens: { refreshToken, accessToken } } });
+    yield put({ type: LOGIN.SUCCESS });
+  } catch (error) {
+    yield put({
+      type: LOGIN.FAIL,
+      payload: { error: error.message },
+    });
+  }
 }
 
-export function* setToken(token) {
-  localStorage.setItem(TOKEN_NAME, token);
+// export function* setToken(action) {
+//   const { token } = action.payload;
 
-  yield put({ type: SET_TOKEN.SUCCESS });
+//   localStorage.setItem(TOKEN.FIELD_NAME, token);
+
+//   yield put({ type: SET_TOKEN.SUCCESS });
+// }
+
+export function* setTokens(action) {
+  const { tokens } = action.payload;
+
+  LocalStorage.setItems(tokens);
+
+  // Object.keys(tokens).map((name) => {
+  //   localStorage.setItem(name, tokens[name]);
+  // });
+
+  yield put({ type: SET_TOKENS.SUCCESS });
 }
 
 function* logout() {
-  localStorage.removeItem(TOKEN_NAME);
+  LocalStorage.removeItems(TOKEN_FIELDS_NAMES);
+
+  // Object.keys(TOKEN_FIELDS_NAMES).map((name) => {
+  //   localStorage.removeItem(TOKEN_FIELDS_NAMES[name]);
+  // });
 
   yield put({ type: LOGOUT.SUCCESS });
 }
 
 export default [
-  takeLatest(LOGIN.REQUEST, login),
+  debounce(200, LOGIN.REQUEST, login),
   takeLatest(LOGOUT.REQUEST, logout),
-  takeLatest(SET_TOKEN.REQUEST, setToken),
+  takeLatest(SET_TOKENS.REQUEST, setTokens),
 ];

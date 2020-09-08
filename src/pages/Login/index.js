@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import LoginForm from './components/LoginForm';
-import ROUTES from '../../routes';
+import { APP_ROUTES } from '../../routes';
 
 import { LOGIN_INPUTS_OPTIONS } from '../../constants/login';
 import { Redirect } from 'react-router-dom';
@@ -11,7 +11,7 @@ import './index.scss';
 const Login = ({ isAuthenticated }) => {
   // TODO create shared HOC for this
   return isAuthenticated ? (
-    <Redirect to={ROUTES.ROOT} />
+    <Redirect to={APP_ROUTES.ROOT} />
   ) : (
     <LoginForm options={LOGIN_INPUTS_OPTIONS} />
   );

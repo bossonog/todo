@@ -1,7 +1,7 @@
 export const FILTER_TYPE = {
-  ALL: 'ALL',
-  ACTIVE: 'ACTIVE',
-  COMPLETED: 'COMPLETED',
+  ALL: 'all',
+  ACTIVE: 'uncompleted',
+  COMPLETED: 'completed',
 };
 
 export const TODOS_FILTER_TYPE_OPTIONS = {

@@ -11,8 +11,12 @@ export const LOGIN_INPUTS_OPTIONS = {
     type: 'text',
     className: 'login-control',
     name: LOGIN_INPUTS_NAMES.USERNAME,
-    placeholder: 'Login',
+    placeholder: 'Username',
     validationFunctions: [isEmpty],
+    validations: {
+      minLength: 6,
+      maxLength: 16,
+    },
   },
   [LOGIN_INPUTS_NAMES.PASSWORD]: {
     id: 2,
@@ -21,7 +25,14 @@ export const LOGIN_INPUTS_OPTIONS = {
     name: LOGIN_INPUTS_NAMES.PASSWORD,
     placeholder: 'Password',
     validationFunctions: [isEmpty],
+    validations: {
+      minLength: 6,
+      maxLength: 16,
+    },
   },
 };
 
-export const TOKEN_NAME = 'token';
+export const TOKEN_FIELDS_NAMES = {
+  REFRESH_TOKEN: 'refreshToken',
+  ACCESS_TOKEN: 'accessToken',
+};
