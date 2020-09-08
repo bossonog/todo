@@ -3,9 +3,8 @@ import { TOKEN_FIELDS_NAMES } from '../constants/login';
 import LocalStorage from '../util/localStorage';
 
 export default class HttpService {
-  // static failedRequests = [];
   static isRefreshed = false;
-  static refreshing = Promise.reject();
+  static refreshing = {};
 
   static request = ({ url, method = 'GET', body, headers = {} }) => {
     const options = {
@@ -59,90 +58,43 @@ export default class HttpService {
       response.url !== SERVER_ROUTES.AUTH.REFRESH_TOKEN
     ) {
       if (!this.isRefreshed) {
-        return this.request({
-          url: SERVER_ROUTES.AUTH.REFRESH_TOKEN,
-          method: 'POST',
-          headers: {
-            'Refresh-Token': localStorage.getItem(
-              TOKEN_FIELDS_NAMES.REFRESH_TOKEN
-            ),
-          },
-        }).then((data) => {
-          this.isRefreshed = false;
+        this.refreshing = new Promise((res, rej) => {
+          this.isRefreshed = true;
 
-          LocalStorage.setItems(data);
+          this.request({
+            url: SERVER_ROUTES.AUTH.REFRESH_TOKEN,
+            method: 'POST',
+            headers: {
+              'Refresh-Token': localStorage.getItem(
+                TOKEN_FIELDS_NAMES.REFRESH_TOKEN
+              ),
+            },
+          })
+            .then((data) => {
+              this.isRefreshed = false;
+              LocalStorage.setItems(data);
+              res();
+            })
+            .catch(() => {
+              this.isRefreshed = false;
+              LocalStorage.removeItems(TOKEN_FIELDS_NAMES);
+              rej();
 
-          this.refreshing = Promise.resolve();
-
-          return this.request(request).then((data) => data);
+              window.location.href = './login';
+            });
         });
       }
-
-      this.isRefreshed = true;
 
       return this.refreshing.then(() =>
         this.request(request).then((data) => data)
       );
     }
 
-    // if (
-    //   response.status === 401 &&
-    //   response.url !== SERVER_ROUTES.AUTH.REFRESH_TOKEN
-    // ) {
-    //   return this.request({
-    //     url: SERVER_ROUTES.AUTH.REFRESH_TOKEN,
-    //     method: 'POST',
-    //     headers: {
-    //       'Refresh-Token': localStorage.getItem(
-    //         TOKEN_FIELDS_NAMES.REFRESH_TOKEN
-    //       ),
-    //     },
-    //   }).then((data) => {
-    //     this.isRefreshing = false;
-    //     // LocalStorage.setItems(data);
-
-    //     // return this.request(request).then((data) => {
-    //     //   return data;
-    //     // });
-    //   });
-
-    //   if (!this.isRefreshing) {
-
-    //   }
-    // }
-
-    // if (
-    //   response.status === 401 &&
-    //   response.url !== SERVER_ROUTES.AUTH.REFRESH_TOKEN
-    // ) {
-    //   this.failedRequests.push(request);
-
-    //   if (!this.isRefreshing) {
-    //     this.request({
-    //       url: SERVER_ROUTES.AUTH.REFRESH_TOKEN,
-    //       method: 'POST',
-    //       headers: {
-    //         'Refresh-Token': localStorage.getItem(
-    //           TOKEN_FIELDS_NAMES.REFRESH_TOKEN
-    //         ),
-    //       },
-    //     })
-    //       .then((data) => {
-    //         this.isRefreshing = false;
-    //         LocalStorage.setItems(data);
-
-    //         this.failedRequests.map((failedRequest) => {
-    //           this.request(failedRequest);
-    //         });
-    //       })
-    //       .catch(() => {
-    //         LocalStorage.removeItems(TOKEN_FIELDS_NAMES);
-    //         window.location.href = './login';
-    //       });
-    //   }
-
-    //   this.isRefreshing = true;
-    // }
+    if (response.status === 400) {
+      console.log('-------');
+      console.log(response);
+      console.log('-------');
+    }
 
     return response.json().then((data) => Promise.reject(data));
   };
