@@ -56,7 +56,8 @@ export default class HttpService {
 
     if (
       response.status === 401 &&
-      response.url !== SERVER_ROUTES.AUTH.REFRESH_TOKEN
+      response.url !== SERVER_ROUTES.AUTH.REFRESH_TOKEN &&
+      true
     ) {
       if (!this.isRefreshed) {
         return this.request({
@@ -83,6 +84,10 @@ export default class HttpService {
       return this.refreshing.then(() =>
         this.request(request).then((data) => data)
       );
+    }
+
+    if (response.status === 400) {
+      console.log(response);
     }
 
     // if (
